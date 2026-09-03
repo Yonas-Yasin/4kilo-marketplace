@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seller dashboard — 4KILO</title>
+<meta name="description" content="Live orders, revenue, listings and payouts for your 4KILO shop.">
+<meta name="theme-color" content="#0F2E24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<style>
+/* ---- data-viz tokens (validated categorical slots 1 & 2) ---- */
+.viz {
+  --surface-1: var(--surface);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-2);
+  --viz-muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --good: #006300;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz {
+    --grid: #2c2c2a; --baseline: #383835;
+    --series-1: #3987e5; --series-2: #d95926; --good: #0ca30c;
+  }
+}
+:root[data-theme="dark"] .viz {
+  --grid: #2c2c2a; --baseline: #383835;
+  --series-1: #3987e5; --series-2: #d95926; --good: #0ca30c;
+}
+
+.chart-card { position: relative; }
+.chart-card svg { width: 100%; height: auto; display: block; overflow: visible; }
+.viz-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-secondary); }
+.viz-legend span.k { display: inline-flex; align-items: center; gap: 7px; }
+.viz-legend i { width: 11px; height: 11px; border-radius: 3px; display: block; }
+.viz-tip {
+  position: absolute; pointer-events: none; z-index: 5; opacity: 0;
+  background: var(--text); color: var(--bg); border-radius: 9px;
+  padding: 9px 12px; font-size: 12px; line-height: 1.5; white-space: nowrap;
+  box-shadow: var(--shadow-md); transition: opacity .12s;
+}
+.viz-tip b { font-weight: 700; }
+.viz-tip .k { display: flex; align-items: center; gap: 7px; justify-content: space-between; gap: 16px; }
+.viz-tip i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.viz-table { display: none; }
+.viz-table.is-open { display: block; }
+.viz-table table { font-variant-numeric: tabular-nums; }
+.hero-num { font-size: 2rem; font-weight: 700; letter-spacing: -.03em; line-height: 1; font-family: var(--font-ui); }
+.kpi b { font-family: var(--font-ui) !important; font-weight: 700; }
+</style>
+</head>
+<body data-page="dashboard">
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main" class="viz">
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="row row--between row--wrap" style="gap:16px">
+        <div class="row" style="gap:14px">
+          <span class="avatar avatar--lg" id="shopAv"></span>
+          <div>
+            <span class="eyebrow">Seller dashboard</span>
+            <h1 class="h2" style="margin-top:6px">Gojo Collective</h1>
+            <p class="muted" style="font-size:13px">Bahir Dar · Verified since 2018 · Next payout Friday</p>
+          </div>
+        </div>
+        <div class="row" style="gap:10px">
+          <button class="btn btn--ghost" id="exportBtn">Export CSV</button>
+          <a class="btn btn--primary" href="sell.html#apply">Add a listing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(20px,3vw,30px)">
+    <div class="wrap dash">
+
+      <!-- ---------- side nav ---------- -->
+      <nav class="side-nav" id="sideNav" aria-label="Dashboard sections"></nav>
+
+      <!-- ---------- content ---------- -->
+      <div class="stack" style="--s:22px">
+
+        <!-- filter row: scopes every chart below -->
+        <div class="toolbar" style="margin:0;padding-bottom:14px">
+          <span class="muted" style="font-size:12.5px">Period</span>
+          <div class="row" style="gap:6px" id="rangeRow"></div>
+          <span class="spacer"></span>
+          <label class="muted" style="font-size:12.5px" for="deptFilter">Department</label>
+          <select class="select" id="deptFilter"></select>
+        </div>
+
+        <!-- KPI tiles -->
+        <div class="kpis" id="kpis"></div>
+
+        <!-- revenue chart -->
+        <div class="panel chart-card">
+          <div class="row row--between row--wrap" style="gap:14px;margin-bottom:4px">
+            <div>
+              <h3 class="h3">Revenue</h3>
+              <p class="muted" style="font-size:12.5px">Paid out, net of the 6% commission</p>
+            </div>
+            <div class="row" style="gap:12px">
+              <div class="viz-legend" id="revLegend"></div>
+              <button class="btn btn--quiet btn--sm" data-table="revTable">Table view</button>
+            </div>
+          </div>
+          <div style="margin-block:14px 4px">
+            <span class="hero-num" id="revHero"></span>
+            <span class="delta up" id="revDelta" style="margin-left:10px"></span>
+          </div>
+          <div id="revChart"></div>
+          <div class="viz-tip" id="revTip"></div>
+          <div class="viz-table table-scroll" id="revTable"><table class="table" id="revTableEl"></table></div>
+        </div>
+
+        <div class="grid" style="grid-template-columns:1.15fr .85fr;align-items:start" id="twoUp">
+          <!-- orders by department -->
+          <div class="panel chart-card">
+            <div class="row row--between" style="margin-bottom:16px">
+              <div>
+                <h3 class="h3">Orders by department</h3>
+                <p class="muted" style="font-size:12.5px">Units shipped in the period</p>
+              </div>
+              <button class="btn btn--quiet btn--sm" data-table="barTable">Table view</button>
+            </div>
+            <div id="barChart"></div>
+            <div class="viz-tip" id="barTip"></div>
+            <div class="viz-table table-scroll" id="barTable"><table class="table" id="barTableEl"></table></div>
+          </div>
+
+          <!-- payout card -->
+          <div class="panel">
+            <h3 class="h3" style="margin-bottom:4px">Next payout</h3>
+            <p class="muted" style="font-size:12.5px;margin-bottom:16px">Clears Friday morning</p>
+            <div class="hero-num" style="font-size:2.4rem" id="payoutHero"></div>
+            <div class="totals" style="margin-top:18px" id="payoutBreak"></div>
+            <div class="stack" style="--s:10px;margin-top:18px" id="payoutSteps"></div>
+          </div>
+        </div>
+
+        <!-- recent orders -->
+        <div class="panel">
+          <div class="row row--between" style="margin-bottom:16px">
+            <h3 class="h3">Recent orders</h3>
+            <a class="btn btn--quiet btn--sm" href="#">View all</a>
+          </div>
+          <div class="table-scroll"><table class="table" id="orderTable"></table></div>
+        </div>
+
+        <!-- listings -->
+        <div class="panel">
+          <div class="row row--between" style="margin-bottom:16px">
+            <h3 class="h3">Your listings</h3>
+            <a class="btn btn--quiet btn--sm" href="browse.html">Preview shop</a>
+          </div>
+          <div class="table-scroll"><table class="table" id="listingTable"></table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/art.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+qs('#shopAv').innerHTML = ART.avatar('s4Gojo Collective');
+
+/* ---------- side nav ---------- */
+qs('#sideNav').innerHTML = [
+  ['chart', 'Overview', true], ['box', 'Orders'], ['grid', 'Listings'],
+  ['wallet', 'Payouts'], ['chat', 'Messages'], ['user', 'Shop profile'], ['sliders', 'Settings']
+].map(([i, t, on]) => `<a href="#" class="${on ? 'is-on' : ''}">${icon(i)}${t}
+  ${t === 'Messages' ? '<span class="badge badge--red" style="margin-left:auto">4</span>' : ''}</a>`).join('');
+
+/* ======================================================================
+   Data model — one filter row scopes every chart
+   ====================================================================== */
+const RANGES = [['7d', '7 days', 7], ['30d', '30 days', 30], ['90d', '90 days', 90], ['12m', '12 months', 365]];
+let range = '12m';
+let dept = 'all';
+
+const MONTHS = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+/* deterministic seeded series so the numbers stay stable across renders */
+function seeded(seed, n, base, growth, wobble) {
+  let s = seed;
+  const rnd = () => (s = (s * 1664525 + 1013904223) % 4294967296) / 4294967296;
+  return Array.from({ length: n }, (_, i) =>
+    Math.round(base * (1 + growth * i / n) * (0.82 + wobble * rnd())));
+}
+
+const DEPTS = [
+  { id: 'craft', name: 'Handmade', seed: 7, weight: 1.00 },
+  { id: 'home', name: 'Home & Living', seed: 13, weight: 0.58 },
+  { id: 'fashion', name: 'Fashion', seed: 29, weight: 0.34 },
+  { id: 'coffee', name: 'Coffee & Spice', seed: 41, weight: 0.19 }
+];
+
+function seriesFor(scope, year) {
+  const list = scope === 'all' ? DEPTS : DEPTS.filter(d => d.id === scope);
+  const n = 12;
+  return Array.from({ length: n }, (_, i) =>
+    list.reduce((sum, d) =>
+      sum + seeded(d.seed * (year === 'now' ? 1 : 3), n, year === 'now' ? 148000 : 104000, 0.55, 0.36)[i], 0));
+}
+
+function pointsInRange(arr) {
+  if (range === '12m') return { labels: MONTHS, values: arr };
+  if (range === '7d') {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const last = arr[arr.length - 1];
+    return { labels: days, values: seeded(91, 7, last / 30, 0.3, 0.5) };
+  }
+  if (range === '30d') {
+    const wk = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    const last = arr[arr.length - 1];
+    return { labels: wk, values: seeded(55, 4, last / 4, 0.25, 0.4) };
+  }
+  return { labels: MONTHS.slice(-3), values: arr.slice(-3) };   /* 90d */
+}
+
+/* ---------- filter UI ---------- */
+qs('#rangeRow').innerHTML = RANGES.map(([k, t]) =>
+  `<button class="chip ${k === range ? 'is-on' : ''}" data-range="${k}">${t}</button>`).join('');
+qs('#deptFilter').innerHTML = '<option value="all">All departments</option>' +
+  DEPTS.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+
+on(qs('#rangeRow'), 'click', e => {
+  const b = e.target.closest('[data-range]');
+  if (!b) return;
+  range = b.dataset.range;
+  qsa('#rangeRow .chip').forEach(c => c.classList.toggle('is-on', c.dataset.range === range));
+  renderAll();
+});
+on(qs('#deptFilter'), 'change', e => { dept = e.target.value; renderAll(); });
+
+/* ======================================================================
+   Chart 1 — Revenue, two series, line + area
+   ====================================================================== */
+function renderRevenue() {
+  const now = pointsInRange(seriesFor(dept, 'now'));
+  const prev = pointsInRange(seriesFor(dept, 'prev'));
+  const labels = now.labels;
+  const A = now.values, B = prev.values;
+
+  const total = A.reduce((a, b) => a + b, 0);
+  const prevTotal = B.reduce((a, b) => a + b, 0);
+  const delta = ((total / prevTotal - 1) * 100);
+
+  qs('#revHero').textContent = money(total);
+  const d = qs('#revDelta');
+  d.className = 'delta ' + (delta >= 0 ? 'up' : 'down');
+  d.innerHTML = `${delta >= 0 ? '▲' : '▼'} ${Math.abs(delta).toFixed(1)}% vs last year`;
+
+  qs('#revLegend').innerHTML = `
+    <span class="k"><i style="background:var(--series-1)"></i>This year</span>
+    <span class="k"><i style="background:var(--series-2)"></i>Last year</span>`;
+
+  /* geometry — container includes the x-axis band */
+  const W = 760, H = 268, L = 56, R = 84, T = 14, Bm = 36;
+  const pw = W - L - R, ph = H - T - Bm;
+  const max = Math.max(...A, ...B) * 1.12;
+  const x = (i) => L + (labels.length === 1 ? pw / 2 : (i / (labels.length - 1)) * pw);
+  const y = (v) => T + ph - (v / max) * ph;
+
+  const line = (arr) => arr.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+  const area = (arr) => line(arr) + ` L${x(arr.length - 1).toFixed(1)} ${T + ph} L${L} ${T + ph} Z`;
+
+  const ticks = 4;
+  const grid = Array.from({ length: ticks + 1 }, (_, i) => {
+    const v = (max / ticks) * i, yy = y(v);
+    return `<line x1="${L}" x2="${L + pw}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}"
+             stroke="var(--grid)" stroke-width="1"/>
+      <text x="${L - 10}" y="${(yy + 4).toFixed(1)}" text-anchor="end" font-size="11"
+            fill="var(--viz-muted)" style="font-variant-numeric:tabular-nums">${
+              v >= 1000 ? Math.round(v / 1000) + 'k' : Math.round(v)}</text>`;
+  }).join('');
+
+  const xlabels = labels.map((l, i) =>
+    `<text x="${x(i).toFixed(1)}" y="${H - 12}" text-anchor="middle" font-size="11"
+           fill="var(--viz-muted)">${l}</text>`).join('');
+
+  /* selective direct labels: endpoints only */
+  const endLabel = (arr, color, name) => {
+    const i = arr.length - 1;
+    return `<circle cx="${x(i).toFixed(1)}" cy="${y(arr[i]).toFixed(1)}" r="4.5" fill="${color}"
+              stroke="var(--surface-1)" stroke-width="2"/>
+      <text x="${(x(i) + 11).toFixed(1)}" y="${(y(arr[i]) + 4).toFixed(1)}" font-size="11.5"
+            font-weight="600" fill="var(--text-secondary)">${name}</text>`;
+  };
+
+  qs('#revChart').innerHTML = `
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Revenue this year versus last year">
+    <defs>
+      <linearGradient id="revFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--series-1)" stop-opacity=".22"/>
+        <stop offset="1" stop-color="var(--series-1)" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${grid}
+    <path d="${area(A)}" fill="url(#revFill)"/>
+    <path d="${line(B)}" fill="none" stroke="var(--series-2)" stroke-width="2"
+          stroke-linejoin="round" stroke-linecap="round" opacity=".85"/>
+    <path d="${line(A)}" fill="none" stroke="var(--series-1)" stroke-width="2"
+          stroke-linejoin="round" stroke-linecap="round"/>
+    ${endLabel(B, 'var(--series-2)', 'Last yr')}
+    ${endLabel(A, 'var(--series-1)', 'This yr')}
+    <line x1="${L}" x2="${L + pw}" y1="${T + ph}" y2="${T + ph}" stroke="var(--baseline)" stroke-width="1"/>
+    ${xlabels}
+    <g id="revHoverG" opacity="0">
+      <line id="revCross" y1="${T}" y2="${T + ph}" stroke="var(--baseline)" stroke-width="1"/>
+      <circle id="revDotA" r="5" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2"/>
+      <circle id="revDotB" r="5" fill="var(--series-2)" stroke="var(--surface-1)" stroke-width="2"/>
+    </g>
+    <rect id="revHit" x="${L}" y="${T}" width="${pw}" height="${ph}" fill="transparent" style="cursor:crosshair"/>
+  </svg>`;
+
+  /* crosshair + tooltip (keyboard-reachable values live in the table view) */
+  const svg = qs('#revChart svg'), tip = qs('#revTip');
+  const g = qs('#revHoverG'), cross = qs('#revCross');
+  const dotA = qs('#revDotA'), dotB = qs('#revDotB');
+  const move = (ev) => {
+    const r = svg.getBoundingClientRect();
+    const px = ((ev.clientX - r.left) / r.width) * W;
+    let i = Math.round(((px - L) / pw) * (labels.length - 1));
+    i = Math.max(0, Math.min(labels.length - 1, i));
+    g.setAttribute('opacity', '1');
+    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i));
+    dotA.setAttribute('cx', x(i)); dotA.setAttribute('cy', y(A[i]));
+    dotB.setAttribute('cx', x(i)); dotB.setAttribute('cy', y(B[i]));
+    tip.style.opacity = '1';
+    tip.innerHTML = `<b>${labels[i]}</b>
+      <div class="k"><span><i style="background:var(--series-1)"></i> This year</span><b>${money(A[i])}</b></div>
+      <div class="k"><span><i style="background:var(--series-2)"></i> Last year</span><b>${money(B[i])}</b></div>`;
+    const cardR = qs('#revChart').closest('.panel').getBoundingClientRect();
+    const px2 = (x(i) / W) * r.width + (r.left - cardR.left);
+    tip.style.left = Math.min(cardR.width - tip.offsetWidth - 8, Math.max(8, px2 - tip.offsetWidth / 2)) + 'px';
+    tip.style.top = ((y(Math.max(A[i], B[i])) / H) * r.height + (r.top - cardR.top) - tip.offsetHeight - 12) + 'px';
+  };
+  on(qs('#revHit'), 'mousemove', move);
+  on(qs('#revHit'), 'mouseleave', () => { g.setAttribute('opacity', '0'); tip.style.opacity = '0'; });
+
+  /* table twin */
+  qs('#revTableEl').innerHTML =
+    `<thead><tr><th>Period</th><th style="text-align:right">This year</th>
+      <th style="text-align:right">Last year</th><th style="text-align:right">Change</th></tr></thead>
+     <tbody>${labels.map((l, i) => {
+      const ch = ((A[i] / B[i] - 1) * 100);
+      return `<tr><td>${l}</td>
+        <td style="text-align:right">${money(A[i])}</td>
+        <td style="text-align:right">${money(B[i])}</td>
+        <td style="text-align:right;color:${ch >= 0 ? 'var(--good)' : 'var(--danger)'}">${ch >= 0 ? '+' : ''}${ch.toFixed(1)}%</td></tr>`;
+    }).join('')}</tbody>`;
+}
+
+/* ======================================================================
+   Chart 2 — Orders by department, horizontal bars, one hue
+   ====================================================================== */
+function renderBars() {
+  const rows = DEPTS
+    .filter(d => dept === 'all' || d.id === dept)
+    .map(d => ({
+      name: d.name,
+      value: Math.round(seeded(d.seed, 12,
+        (range === '7d' ? 34 : range === '30d' ? 148 : range === '90d' ? 430 : 1560) * d.weight,
+        0.4, 0.3)[11])
+    }))
+    .sort((a, b) => b.value - a.value);
+
+  const W = 520, rowH = 44, T = 6;
+  const H = T + rows.length * rowH + 26;
+  const L = 128, R = 68;
+  const pw = W - L - R;
+  const max = Math.max(...rows.map(r => r.value)) * 1.02;
+
+  qs('#barChart').innerHTML = `
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Orders by department">
+    ${rows.map((r, i) => {
+      const y = T + i * rowH + 10;
+      const w = Math.max(3, (r.value / max) * pw);
+      return `<g class="bar-g" data-i="${i}">
+        <rect x="0" y="${y - 10}" width="${W}" height="${rowH - 4}" fill="transparent"/>
+        <text x="${L - 14}" y="${y + 14}" text-anchor="end" font-size="12.5"
+              fill="var(--text-secondary)">${r.name}</text>
+        <rect x="${L}" y="${y}" width="${w.toFixed(1)}" height="18" rx="4"
+              fill="var(--series-1)"/>
+        <text x="${(L + w + 10).toFixed(1)}" y="${y + 14}" font-size="12" font-weight="600"
+              fill="var(--text-secondary)" style="font-variant-numeric:tabular-nums">${r.value.toLocaleString()}</text>
+      </g>`;
+    }).join('')}
+    <line x1="${L}" x2="${L}" y1="${T}" y2="${T + rows.length * rowH}" stroke="var(--baseline)" stroke-width="1"/>
+  </svg>`;
+
+  const tip = qs('#barTip');
+  qsa('#barChart .bar-g').forEach((g, i) => {
+    on(g, 'mouseenter', () => {
+      const r = rows[i], tot = rows.reduce((a, b) => a + b.value, 0);
+      tip.style.opacity = '1';
+      tip.innerHTML = `<b>${r.name}</b>
+        <div class="k"><span>Orders</span><b>${r.value.toLocaleString()}</b></div>
+        <div class="k"><span>Share</span><b>${((r.value / tot) * 100).toFixed(1)}%</b></div>`;
+      const box = g.getBoundingClientRect(), card = qs('#barChart').closest('.panel').getBoundingClientRect();
+      tip.style.left = Math.max(8, box.left - card.left + 40) + 'px';
+      tip.style.top = (box.top - card.top - 8) + 'px';
+    });
+    on(g, 'mouseleave', () => tip.style.opacity = '0');
+  });
+
+  const tot = rows.reduce((a, b) => a + b.value, 0);
+  qs('#barTableEl').innerHTML =
+    `<thead><tr><th>Department</th><th style="text-align:right">Orders</th><th style="text-align:right">Share</th></tr></thead>
+     <tbody>${rows.map(r => `<tr><td>${r.name}</td>
+        <td style="text-align:right">${r.value.toLocaleString()}</td>
+        <td style="text-align:right">${((r.value / tot) * 100).toFixed(1)}%</td></tr>`).join('')}</tbody>`;
+}
+
+/* ======================================================================
+   KPI tiles, payout, tables
+   ====================================================================== */
+function renderKpis() {
+  const A = pointsInRange(seriesFor(dept, 'now')).values;
+  const B = pointsInRange(seriesFor(dept, 'prev')).values;
+  const rev = A.reduce((a, b) => a + b, 0);
+  const orders = Math.round(rev / 3180);
+  const tiles = [
+    ['Gross revenue', money(rev), ((rev / B.reduce((a, b) => a + b, 0) - 1) * 100)],
+    ['Orders', orders.toLocaleString(), 12.4],
+    ['Average order', money(Math.round(rev / orders)), 4.1],
+    ['Claim rate', '0.4%', -0.3]
+  ];
+  qs('#kpis').innerHTML = tiles.map(([label, val, dl]) => `
+    <div class="kpi">
+      <span>${label}</span>
+      <b>${val}</b>
+      <span class="delta ${dl >= 0 ? 'up' : 'down'}">
+        ${dl >= 0 ? '▲' : '▼'} ${Math.abs(dl).toFixed(1)}%
+        <span class="muted" style="font-weight:500">vs previous</span>
+      </span>
+    </div>`).join('');
+}
+
+function renderPayout() {
+  const gross = 196085;
+  const fee = Math.round(gross * 0.06);
+  qs('#payoutHero').textContent = money(gross - fee);
+  qs('#payoutBreak').innerHTML = `
+    <div><span>62 orders, gross</span><span>${money(gross)}</span></div>
+    <div><span>4KILO commission (6%)</span><span>−${money(fee)}</span></div>
+    <div><span>Payment processing</span><span>${money(0)}</span></div>
+    <div class="grand"><span>To Abyssinia ···4471</span><span>${money(gross - fee)}</span></div>`;
+  qs('#payoutSteps').innerHTML = [
+    ['check', 'Orders delivered', 'done'],
+    ['check', 'Protection window closed', 'done'],
+    ['refresh', 'Payout batched Friday 09:00', 'now'],
+    ['wallet', 'Cleared to your bank', 'next']
+  ].map(([i, t, st]) => `
+    <div class="row" style="gap:10px;font-size:12.5px;color:${st === 'next' ? 'var(--muted)' : 'var(--text-2)'}">
+      <span style="width:22px;height:22px;border-radius:99px;display:grid;place-items:center;flex:none;
+        background:${st === 'done' ? 'var(--forest-500)' : st === 'now' ? 'var(--accent)' : 'var(--surface-2)'};
+        color:${st === 'next' ? 'var(--muted)' : '#fff'}">${icon(i)}</span>
+      <span>${t}</span>
+      ${st === 'now' ? '<span class="badge badge--gold" style="margin-left:auto">In progress</span>' : ''}
+    </div>`).join('');
+  qsa('#payoutSteps svg').forEach(s => { s.style.width = '12px'; s.style.height = '12px'; });
+}
+
+const ORDER_STATUS = [['Delivered', 'badge--green'], ['In transit', 'badge--gold'],
+  ['Preparing', ''], ['Delivered', 'badge--green'], ['Refunded', 'badge--red'], ['Delivered', 'badge--green']];
+
+function renderOrders() {
+  const pool = PRODUCTS.filter(p => p.seller === 's4' || p.cat === 'craft' || p.cat === 'home');
+  qs('#orderTable').innerHTML = `
+    <thead><tr><th>Order</th><th>Item</th><th>Buyer</th><th>City</th>
+      <th>Status</th><th style="text-align:right">Total</th></tr></thead>
+    <tbody>${ORDER_STATUS.map(([st, cls], i) => {
+      const p = pool[i % pool.length];
+      const qty = 1 + (i % 3);
+      return `<tr>
+        <td class="mono">4K-${28800 + i * 37}</td>
+        <td style="max-width:230px">
+          <div class="row" style="gap:9px">
+            <span style="width:34px;height:34px;border-radius:7px;overflow:hidden;flex:none">
+              ${ART.product(p.art, p.cw)}</span>
+            <span style="font-weight:550;font-size:12.5px;line-height:1.3">${esc(p.title.split('—')[0].trim())}
+              <span class="muted" style="display:block;font-weight:400">×${qty}</span></span>
+          </div>
+        </td>
+        <td>${REVIEW_NAMES[i * 3 % REVIEW_NAMES.length]}</td>
+        <td class="muted">${CITIES[i % CITIES.length]}</td>
+        <td><span class="badge ${cls}">${st}</span></td>
+        <td style="text-align:right;font-weight:600;font-variant-numeric:tabular-nums">${money(p.price * qty)}</td>
+      </tr>`;
+    }).join('')}</tbody>`;
+}
+
+function renderListings() {
+  const mine = PRODUCTS.filter(p => p.seller === 's4' || p.cat === 'craft' || p.cat === 'home').slice(0, 6);
+  qs('#listingTable').innerHTML = `
+    <thead><tr><th>Product</th><th style="text-align:right">Price</th><th style="text-align:right">Stock</th>
+      <th style="text-align:right">Views</th><th style="text-align:right">Conversion</th><th>Status</th></tr></thead>
+    <tbody>${mine.map((p, i) => {
+      const views = 400 + (i * 917) % 5200;
+      const conv = (1.4 + ((i * 31) % 40) / 10).toFixed(1);
+      const low = p.stock < 30;
+      return `<tr>
+        <td>
+          <div class="row" style="gap:9px">
+            <span style="width:34px;height:34px;border-radius:7px;overflow:hidden;flex:none">
+              ${ART.product(p.art, p.cw)}</span>
+            <a href="product.html?id=${p.id}" style="font-weight:550;font-size:12.5px">${esc(p.title.split('—')[0].trim())}</a>
+          </div>
+        </td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">${money(p.price)}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums;${low ? 'color:var(--danger);font-weight:600' : ''}">${p.stock}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">${views.toLocaleString()}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">${conv}%</td>
+        <td><span class="badge ${low ? 'badge--red' : 'badge--green'}">${low ? 'Low stock' : 'Live'}</span></td>
+      </tr>`;
+    }).join('')}</tbody>`;
+}
+
+/* ---------- table-view toggles ---------- */
+on(document, 'click', e => {
+  const b = e.target.closest('[data-table]');
+  if (!b) return;
+  const t = qs('#' + b.dataset.table);
+  const open = t.classList.toggle('is-open');
+  b.textContent = open ? 'Chart view' : 'Table view';
+  const chart = t.closest('.panel').querySelector('svg');
+  if (chart) chart.parentElement.style.display = open ? 'none' : '';
+});
+
+on(qs('#exportBtn'), 'click', () => toast('CSV exported to your downloads'));
+
+/* ---------- responsive two-up ---------- */
+function fitTwoUp() {
+  qs('#twoUp').style.gridTemplateColumns = window.innerWidth < 900 ? '1fr' : '1.15fr .85fr';
+}
+on(window, 'resize', fitTwoUp); fitTwoUp();
+
+function renderAll() {
+  renderKpis(); renderRevenue(); renderBars(); renderPayout(); renderOrders(); renderListings();
+}
+renderAll();
+/* re-render charts when the theme flips so series steps match the surface */
+new MutationObserver(() => { renderRevenue(); renderBars(); })
+  .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+</script>
+</body>
+</html>

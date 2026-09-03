@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse the market — 4KILO</title>
+<meta name="description" content="Filter 8,400 products by department, maker, price, city and craft. Every listing names its maker.">
+<meta name="theme-color" content="#0F2E24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="browse">
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main">
+  <section class="section--tight" style="padding-bottom:0">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a><span id="bcSep"></span><span id="bcNow">Browse</span>
+      </nav>
+      <h1 class="h1" id="pageTitle">Browse the market</h1>
+      <p class="lede" style="margin-top:10px" id="pageLede">
+        Every listing names its maker, its materials and where it was made.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(28px,4vw,44px)">
+    <div class="wrap shop">
+
+      <!-- ---------- filter rail ---------- -->
+      <aside class="rail" id="rail" aria-label="Filters">
+        <div class="row row--between" style="margin-bottom:18px">
+          <h4 style="margin:0">Filters</h4>
+          <button class="btn btn--quiet btn--sm" id="clearAll">Clear all</button>
+        </div>
+
+        <div class="rail__group">
+          <h4>Department</h4>
+          <div id="fCats"></div>
+        </div>
+
+        <div class="rail__group">
+          <h4>Price · <span class="mono" id="priceLabel"></span></h4>
+          <input class="range" type="range" id="fPrice" min="500" max="150000" step="500" value="150000">
+          <div class="row row--between mono muted" style="font-size:11px;margin-top:4px">
+            <span>Br 500</span><span>Br 150,000+</span>
+          </div>
+        </div>
+
+        <div class="rail__group">
+          <h4>Maker</h4>
+          <div id="fSellers" style="max-height:230px;overflow-y:auto"></div>
+        </div>
+
+        <div class="rail__group">
+          <h4>Attributes</h4>
+          <div id="fBadges"></div>
+        </div>
+
+        <div class="rail__group">
+          <h4>Rating</h4>
+          <div id="fRating"></div>
+        </div>
+      </aside>
+
+      <!-- ---------- results ---------- -->
+      <div>
+        <div class="toolbar">
+          <button class="btn btn--ghost btn--sm" id="filterToggle" style="display:none">
+            <span id="ftIcon"></span> Filters
+          </button>
+          <strong id="count" class="mono"></strong>
+          <span class="spacer"></span>
+          <label class="muted" style="font-size:12.5px" for="sort">Sort</label>
+          <select class="select" id="sort">
+            <option value="relevance">Most relevant</option>
+            <option value="new">Newest first</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="rating">Highest rated</option>
+            <option value="deals">Biggest discount</option>
+          </select>
+        </div>
+
+        <div class="active-filters" id="activeFilters"></div>
+        <div class="cards cards--3" id="grid"></div>
+        <div id="noResults" style="display:none"></div>
+
+        <div class="text-c" style="margin-top:44px" id="moreWrap">
+          <button class="btn btn--ghost btn--lg" id="loadMore">Load more</button>
+          <p class="muted" style="font-size:12.5px;margin-top:12px" id="shownNote"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- recently viewed ---------- -->
+  <section class="section--tight tint" id="recentSec" style="display:none">
+    <div class="wrap">
+      <h2 class="h3" style="margin-bottom:20px">Recently viewed</h2>
+      <div class="scroll-x" id="recentRow"></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/art.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+/* ---------- read the URL ---------- */
+const params = new URLSearchParams(location.search);
+const state = {
+  q: params.get('q') || '',
+  cats: new Set(params.get('cat') ? [params.get('cat')] : []),
+  sellers: new Set(params.get('seller') ? [params.get('seller')] : []),
+  badges: new Set(),
+  maxPrice: 150000,
+  minRating: 0,
+  sort: params.get('sort') || 'relevance',
+  view: params.get('view') || '',
+  shown: 12
+};
+if (state.sort === 'deals') state.badges.add('deal');
+
+qs('#bcSep').innerHTML = icon('chevron');
+qs('#ftIcon').innerHTML = icon('sliders');
+qs('#sort').value = ['relevance','new','price-asc','price-desc','rating','deals'].includes(state.sort) ? state.sort : 'relevance';
+
+/* ---------- page framing ---------- */
+(function frame() {
+  const t = qs('#pageTitle'), l = qs('#pageLede'), bc = qs('#bcNow');
+  if (state.view === 'saved') {
+    t.textContent = 'Your saved items';
+    l.textContent = 'Things you tapped the heart on. They stay here on this device.';
+    bc.textContent = 'Saved';
+  } else if (state.q) {
+    t.innerHTML = `Results for “${esc(state.q)}”`;
+    l.textContent = 'Sorted by how well each listing matches your search.';
+    bc.textContent = 'Search';
+    qs('#siteSearch').value = state.q;
+  } else if (state.cats.size) {
+    const c = CATEGORIES.find(c => c.id === [...state.cats][0]);
+    if (c) { t.textContent = c.name; l.textContent = c.blurb + '. Every listing names its maker.'; bc.textContent = c.name; }
+  } else if (state.sellers.size) {
+    const s = SELLERS[[...state.sellers][0]];
+    if (s) { t.textContent = s.name; l.textContent = s.bio; bc.textContent = s.name; }
+  } else if (state.sort === 'deals') {
+    t.textContent = 'Marked down this week'; bc.textContent = 'Deals';
+    l.textContent = 'Discounts set by the makers themselves. Ends Sunday at midnight.';
+  }
+})();
+
+/* ---------- build the rail ---------- */
+function countBy(fn) {
+  return PRODUCTS.reduce((m, p) => { const k = fn(p); m[k] = (m[k] || 0) + 1; return m; }, {});
+}
+const catCounts = countBy(p => p.cat);
+qs('#fCats').innerHTML = CATEGORIES.map(c => `
+  <label><input type="checkbox" data-f="cats" value="${c.id}" ${state.cats.has(c.id) ? 'checked' : ''}>
+  ${c.name}<span class="n">${catCounts[c.id] || 0}</span></label>`).join('');
+
+const sellerCounts = countBy(p => p.seller);
+qs('#fSellers').innerHTML = Object.values(SELLERS)
+  .filter(s => sellerCounts[s.id])
+  .sort((a, b) => (sellerCounts[b.id] || 0) - (sellerCounts[a.id] || 0))
+  .map(s => `<label><input type="checkbox" data-f="sellers" value="${s.id}" ${state.sellers.has(s.id) ? 'checked' : ''}>
+  ${s.name}<span class="n">${sellerCounts[s.id]}</span></label>`).join('');
+
+const BADGE_FILTERS = [['handmade','Handmade'],['deal','On offer'],['new','New this week'],
+  ['bestseller','Bestseller'],['editors',"Editors' pick"]];
+qs('#fBadges').innerHTML = BADGE_FILTERS.map(([k, t]) => {
+  const n = PRODUCTS.filter(p => p.badges.includes(k)).length;
+  return `<label><input type="checkbox" data-f="badges" value="${k}" ${state.badges.has(k) ? 'checked' : ''}>
+  ${t}<span class="n">${n}</span></label>`;
+}).join('');
+
+qs('#fRating').innerHTML = [0, 4, 4.5, 4.8].map(r => `
+  <label><input type="radio" name="rating" data-f="rating" value="${r}" ${state.minRating === r ? 'checked' : ''}>
+  ${r === 0 ? 'Any rating' : r + ' & up'}</label>`).join('');
+
+/* ---------- filtering ---------- */
+function matches(p) {
+  if (state.view === 'saved' && !Wish.has(p.id)) return false;
+  if (state.cats.size && !state.cats.has(p.cat)) return false;
+  if (state.sellers.size && !state.sellers.has(p.seller)) return false;
+  if (state.badges.size && ![...state.badges].every(b => p.badges.includes(b))) return false;
+  if (p.price > state.maxPrice) return false;
+  if (p.rating < state.minRating) return false;
+  if (state.q) {
+    const hay = (p.title + ' ' + p.sub + ' ' + p.cat + ' ' + p.sellerObj.name + ' ' + p.tagline + ' ' +
+      (p.highlights || []).join(' ')).toLowerCase();
+    if (!state.q.toLowerCase().split(/\s+/).every(w => hay.includes(w))) return false;
+  }
+  return true;
+}
+
+const SORTERS = {
+  relevance: (a, b) => (b.reviews * b.rating) - (a.reviews * a.rating),
+  new: (a, b) => (b.badges.includes('new') ? 1 : 0) - (a.badges.includes('new') ? 1 : 0) || b.reviews - a.reviews,
+  'price-asc': (a, b) => a.price - b.price,
+  'price-desc': (a, b) => b.price - a.price,
+  rating: (a, b) => b.rating - a.rating || b.reviews - a.reviews,
+  deals: (a, b) => b.discount - a.discount
+};
+
+function activeChips() {
+  const chips = [];
+  state.cats.forEach(c => chips.push(['cats', c, CATEGORIES.find(x => x.id === c)?.name || c]));
+  state.sellers.forEach(s => chips.push(['sellers', s, SELLERS[s]?.name || s]));
+  state.badges.forEach(b => chips.push(['badges', b, BADGE_FILTERS.find(x => x[0] === b)?.[1] || b]));
+  if (state.maxPrice < 150000) chips.push(['price', '', 'Under ' + money(state.maxPrice)]);
+  if (state.minRating) chips.push(['rating', '', state.minRating + '★ & up']);
+  if (state.q) chips.push(['q', '', '“' + state.q + '”']);
+  return chips;
+}
+
+function render() {
+  const list = PRODUCTS.filter(matches).sort(SORTERS[state.sort] || SORTERS.relevance);
+  const slice = list.slice(0, state.shown);
+
+  qs('#count').textContent = list.length + (list.length === 1 ? ' product' : ' products');
+  qs('#priceLabel').textContent = state.maxPrice >= 150000 ? 'any' : 'under ' + money(state.maxPrice);
+
+  qs('#activeFilters').innerHTML = activeChips().map(([f, v, label]) =>
+    `<button class="chip" data-clear="${f}" data-val="${v}"><b>${esc(label)}</b> ${icon('close')}</button>`).join('');
+  qsa('#activeFilters .chip svg').forEach(s => { s.style.width = '12px'; s.style.height = '12px'; });
+
+  qs('#grid').innerHTML = slice.map(p => productCard(p)).join('');
+  qsa('#grid .reveal').forEach(el => el.classList.add('in'));
+  Wish.sync();
+
+  const none = qs('#noResults');
+  if (!list.length) {
+    none.style.display = '';
+    none.innerHTML = `<div class="empty panel">
+      ${ART.emptyCart()}
+      <h4>${state.view === 'saved' ? 'You have not saved anything yet' : 'Nothing matches those filters'}</h4>
+      <p>${state.view === 'saved'
+        ? 'Tap the heart on any product and it will show up here.'
+        : 'Try widening the price range or clearing a department.'}</p>
+      <button class="btn btn--primary" id="resetBtn">${state.view === 'saved' ? 'Browse the market' : 'Clear all filters'}</button>
+    </div>`;
+    on(qs('#resetBtn'), 'click', () => {
+      if (state.view === 'saved') location.href = 'browse.html';
+      else clearAll();
+    });
+  } else none.style.display = 'none';
+
+  qs('#moreWrap').style.display = list.length > state.shown ? '' : 'none';
+  qs('#shownNote').textContent = `Showing ${slice.length} of ${list.length}`;
+}
+
+function clearAll() {
+  state.cats.clear(); state.sellers.clear(); state.badges.clear();
+  state.maxPrice = 150000; state.minRating = 0; state.q = '';
+  qsa('.rail input[type=checkbox]').forEach(i => i.checked = false);
+  qsa('.rail input[type=radio]').forEach(i => i.checked = i.value === '0');
+  qs('#fPrice').value = 150000;
+  qs('#siteSearch').value = '';
+  render();
+}
+
+/* ---------- events ---------- */
+on(qs('#rail'), 'change', e => {
+  const f = e.target.dataset.f;
+  if (!f) return;
+  if (f === 'rating') state.minRating = Number(e.target.value);
+  else {
+    const set = state[f];
+    e.target.checked ? set.add(e.target.value) : set.delete(e.target.value);
+  }
+  state.shown = 12;
+  render();
+});
+on(qs('#fPrice'), 'input', e => {
+  state.maxPrice = Number(e.target.value);
+  qs('#priceLabel').textContent = state.maxPrice >= 150000 ? 'any' : 'under ' + money(state.maxPrice);
+});
+on(qs('#fPrice'), 'change', () => { state.shown = 12; render(); });
+on(qs('#sort'), 'change', e => { state.sort = e.target.value; render(); });
+on(qs('#clearAll'), 'click', clearAll);
+on(qs('#loadMore'), 'click', () => { state.shown += 9; render(); });
+on(qs('#activeFilters'), 'click', e => {
+  const b = e.target.closest('[data-clear]');
+  if (!b) return;
+  const { clear, val } = b.dataset;
+  if (clear === 'price') { state.maxPrice = 150000; qs('#fPrice').value = 150000; }
+  else if (clear === 'rating') { state.minRating = 0; qsa('[data-f=rating]').forEach(i => i.checked = i.value === '0'); }
+  else if (clear === 'q') { state.q = ''; qs('#siteSearch').value = ''; }
+  else {
+    state[clear].delete(val);
+    const inp = qs(`[data-f="${clear}"][value="${val}"]`);
+    if (inp) inp.checked = false;
+  }
+  render();
+});
+document.addEventListener('wish:change', render);
+
+/* mobile filter toggle */
+function checkMobile() {
+  const small = window.innerWidth <= 900;
+  qs('#filterToggle').style.display = small ? '' : 'none';
+  if (!small) qs('#rail').classList.remove('is-open');
+}
+on(window, 'resize', checkMobile); checkMobile();
+on(qs('#filterToggle'), 'click', () => qs('#rail').classList.toggle('is-open'));
+
+/* ---------- recently viewed ---------- */
+const recent = Store.read('recent', []).map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+if (recent.length) {
+  qs('#recentSec').style.display = '';
+  qs('#recentRow').innerHTML = recent.slice(0, 8).map(p => productCard(p, { noQuick: true })).join('');
+  qsa('#recentRow .reveal').forEach(el => el.classList.add('in'));
+}
+
+render();
+</script>
+</body>
+</html>

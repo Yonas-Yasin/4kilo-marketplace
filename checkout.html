@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout — 4KILO Marketplace</title>
+<meta name="description" content="Secure checkout protected by 4KILO Protect.">
+<meta name="theme-color" content="#0F2E24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="checkout">
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main">
+  <section class="section--tight">
+    <div class="wrap">
+      <h1 class="h1">Checkout</h1>
+      <p class="lede" style="margin-top:8px">
+        Your payment is held by 4KILO until you confirm the order arrived as described.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(20px,3vw,32px)">
+    <div class="wrap">
+      <div class="steps" id="steps"></div>
+
+      <div class="pdp" style="grid-template-columns:1.15fr .85fr">
+        <!-- ---------- form column ---------- -->
+        <div>
+          <!-- STEP 1 : delivery -->
+          <section class="panel" data-step="1">
+            <h3 class="h3" style="margin-bottom:20px">Where is it going?</h3>
+            <div class="stack" style="--s:16px">
+              <div class="field-grid">
+                <div class="field"><label for="fn">First name</label><input id="fn" required placeholder="Selam"></div>
+                <div class="field"><label for="ln">Last name</label><input id="ln" required placeholder="Tesfaye"></div>
+              </div>
+              <div class="field-grid">
+                <div class="field"><label for="ph">Phone</label><input id="ph" type="tel" placeholder="+251 91 234 5678"></div>
+                <div class="field"><label for="em">Email</label><input id="em" type="email" placeholder="you@example.com"></div>
+              </div>
+              <div class="field">
+                <label for="city">City</label>
+                <select id="city"></select>
+              </div>
+              <div class="field">
+                <label for="addr">Address / landmark</label>
+                <input id="addr" placeholder="Bole Sub-city, Woreda 03, near Alem Cinema">
+                <small>Our couriers navigate by landmark — the more specific, the faster it lands.</small>
+              </div>
+              <div class="field">
+                <label for="note">Delivery note <span class="muted">(optional)</span></label>
+                <textarea id="note" rows="2" placeholder="Call on arrival, gate is on the left"></textarea>
+              </div>
+            </div>
+
+            <h4 style="font-family:var(--font-ui);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:26px 0 12px">Delivery speed</h4>
+            <div class="stack" style="--s:10px" id="shipOpts"></div>
+
+            <div class="row" style="margin-top:26px;gap:10px">
+              <a class="btn btn--ghost" href="browse.html">Keep shopping</a>
+              <span class="spacer"></span>
+              <button class="btn btn--primary btn--lg" data-next="2">Continue to payment</button>
+            </div>
+          </section>
+
+          <!-- STEP 2 : payment -->
+          <section class="panel" data-step="2" style="display:none">
+            <h3 class="h3" style="margin-bottom:20px">How would you like to pay?</h3>
+            <div class="stack" style="--s:10px" id="payOpts"></div>
+
+            <div id="cardFields" style="display:none;margin-top:22px">
+              <div class="stack" style="--s:14px">
+                <div class="field"><label for="cn">Card number</label><input id="cn" inputmode="numeric" placeholder="4242 4242 4242 4242"></div>
+                <div class="field-grid">
+                  <div class="field"><label for="ce">Expiry</label><input id="ce" placeholder="MM / YY"></div>
+                  <div class="field"><label for="cc">CVC</label><input id="cc" inputmode="numeric" placeholder="123"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel panel--flat" style="margin-top:22px;display:flex;gap:12px;align-items:flex-start">
+              <span id="protIcon"></span>
+              <p style="font-size:13px;color:var(--text-2);margin:0">
+                <b style="color:var(--text)">Held by 4KILO Protect.</b>
+                We do not pass the money to the seller until 48 hours after you confirm delivery.
+                Open a claim any time before then and we refund in full.
+              </p>
+            </div>
+
+            <div class="row" style="margin-top:26px;gap:10px">
+              <button class="btn btn--ghost" data-next="1">Back</button>
+              <span class="spacer"></span>
+              <button class="btn btn--primary btn--lg" data-next="3">Review order</button>
+            </div>
+          </section>
+
+          <!-- STEP 3 : review -->
+          <section class="panel" data-step="3" style="display:none">
+            <h3 class="h3" style="margin-bottom:20px">One last look</h3>
+            <div id="reviewBlock"></div>
+            <label class="row" style="margin-top:22px;gap:10px;align-items:flex-start;font-size:13px;color:var(--text-2);cursor:pointer">
+              <input type="checkbox" id="agree" style="margin-top:3px;accent-color:var(--brand);width:16px;height:16px">
+              <span>I have read the return policy and understand that made-to-order furniture and
+              perishable goods are excluded from the 14-day window.</span>
+            </label>
+            <div class="row" style="margin-top:26px;gap:10px">
+              <button class="btn btn--ghost" data-next="2">Back</button>
+              <span class="spacer"></span>
+              <button class="btn btn--primary btn--lg" id="placeOrder">Place order</button>
+            </div>
+          </section>
+
+          <!-- STEP 4 : confirmation -->
+          <section class="panel text-c" data-step="4" style="display:none;padding:clamp(30px,5vw,58px)">
+            <div style="width:150px;margin:0 auto 22px" id="doneArt"></div>
+            <span class="badge badge--green">Order confirmed</span>
+            <h2 class="h2" style="margin-block:14px 12px">Thank you — it is on its way.</h2>
+            <p class="lede" style="margin-inline:auto" id="doneLede"></p>
+            <div class="panel panel--flat" style="max-width:420px;margin:26px auto 0;text-align:left" id="doneSummary"></div>
+            <div class="row" style="justify-content:center;gap:10px;margin-top:26px;flex-wrap:wrap">
+              <a class="btn btn--primary" href="browse.html">Continue shopping</a>
+              <a class="btn btn--ghost" href="dashboard.html">Track this order</a>
+            </div>
+          </section>
+        </div>
+
+        <!-- ---------- summary column ---------- -->
+        <aside class="gallery" id="summaryCol">
+          <div class="panel">
+            <h3 class="h3" style="margin-bottom:6px">Order summary</h3>
+            <p class="muted" style="font-size:12.5px;margin-bottom:14px" id="itemCount"></p>
+            <div id="summaryLines" style="max-height:320px;overflow-y:auto"></div>
+            <div class="totals" style="margin-top:18px" id="summaryTotals"></div>
+            <div class="stack" style="--s:8px;margin-top:16px" id="summaryPerks"></div>
+          </div>
+          <div class="panel" style="margin-top:14px">
+            <div class="field">
+              <label for="promo">Promo code</label>
+              <div class="row" style="gap:8px">
+                <input id="promo" placeholder="Try 4KILOWELCOME">
+                <button class="btn btn--dark" id="applyPromo">Apply</button>
+              </div>
+              <small id="promoMsg"></small>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/art.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+let step = 1;
+let shipMethod = 'standard';
+let payMethod = 'telebirr';
+let promo = 0;
+
+const SHIP_METHODS = [
+  ['standard', 'Standard', '2–5 working days', 120],
+  ['express', 'Express', 'Next working day in Addis Ababa', 340],
+  ['pickup', 'Collect in person', 'From the maker’s workshop, free', 0]
+];
+const PAY_METHODS = [
+  ['telebirr', 'telebirr', 'Pay from your Ethio Telecom wallet'],
+  ['cbe', 'CBE Birr', 'Direct from your CBE account'],
+  ['chapa', 'Chapa', 'Cards, wallets and bank transfer'],
+  ['card', 'Visa / Mastercard', 'International cards accepted'],
+  ['cod', 'Cash on delivery', 'Addis Ababa only, orders under Br 5,000']
+];
+
+/* ---------- steps ---------- */
+const STEP_LABELS = ['Delivery', 'Payment', 'Review', 'Done'];
+function paintSteps() {
+  qs('#steps').innerHTML = STEP_LABELS.map((l, i) => {
+    const n = i + 1;
+    const cls = n === step ? 'is-on' : n < step ? 'is-done' : '';
+    return `<div class="step ${cls}">
+      <span class="step__n">${n < step ? '✓' : n}</span><span>${l}</span>
+    </div>${n < 4 ? '<span class="step__line"></span>' : ''}`;
+  }).join('');
+}
+function goto(n) {
+  step = n;
+  qsa('[data-step]').forEach(s => s.style.display = Number(s.dataset.step) === n ? '' : 'none');
+  qs('#summaryCol').style.display = n === 4 ? 'none' : '';
+  paintSteps();
+  window.scrollTo({ top: 120, behavior: 'smooth' });
+}
+on(document, 'click', e => {
+  const b = e.target.closest('[data-next]');
+  if (!b) return;
+  const target = Number(b.dataset.next);
+  if (target === 2 && !validateDelivery()) return;
+  goto(target);
+});
+
+function validateDelivery() {
+  const req = ['fn', 'ln', 'ph', 'addr'];
+  const missing = req.filter(id => !qs('#' + id).value.trim());
+  if (missing.length) {
+    qs('#' + missing[0]).focus();
+    toast('Please fill in your ' + ({ fn: 'first name', ln: 'last name', ph: 'phone number', addr: 'address' })[missing[0]], 'close');
+    return false;
+  }
+  return true;
+}
+
+/* ---------- fields ---------- */
+qs('#city').innerHTML = CITIES.map(c => `<option>${c}</option>`).join('');
+qs('#protIcon').innerHTML = icon('shield');
+qs('#protIcon').firstChild.style.cssText = 'width:24px;height:24px;color:var(--brand);flex:none';
+
+qs('#shipOpts').innerHTML = SHIP_METHODS.map(([k, t, d, price]) => `
+  <label class="pay-opt ${k === shipMethod ? 'is-on' : ''}" data-ship="${k}">
+    <input type="radio" name="ship" value="${k}" ${k === shipMethod ? 'checked' : ''} style="accent-color:var(--brand)">
+    <span style="flex:1"><b>${t}</b><small>${d}</small></span>
+    <b style="font-size:13.5px">${price ? money(price) : 'Free'}</b>
+  </label>`).join('');
+on(qs('#shipOpts'), 'change', e => {
+  shipMethod = e.target.value;
+  qsa('#shipOpts .pay-opt').forEach(o => o.classList.toggle('is-on', o.dataset.ship === shipMethod));
+  paintSummary();
+});
+
+qs('#payOpts').innerHTML = PAY_METHODS.map(([k, t, d]) => `
+  <label class="pay-opt ${k === payMethod ? 'is-on' : ''}" data-pay="${k}">
+    <input type="radio" name="pay" value="${k}" ${k === payMethod ? 'checked' : ''} style="accent-color:var(--brand)">
+    <span style="height:26px;display:flex;align-items:center;color:var(--text-2)">
+      ${ART.partner(k === 'card' ? 'visa' : k === 'cod' ? 'dhl' : k)}
+    </span>
+    <span style="flex:1"><b>${t}</b><small>${d}</small></span>
+  </label>`).join('');
+on(qs('#payOpts'), 'change', e => {
+  payMethod = e.target.value;
+  qsa('#payOpts .pay-opt').forEach(o => o.classList.toggle('is-on', o.dataset.pay === payMethod));
+  qs('#cardFields').style.display = payMethod === 'card' ? '' : 'none';
+});
+
+/* ---------- summary ---------- */
+function shippingCost() {
+  if (!Cart.count) return 0;
+  const m = SHIP_METHODS.find(s => s[0] === shipMethod);
+  if (!m) return 0;
+  if (m[0] === 'standard' && Cart.subtotal >= 2500) return 0;
+  return m[3];
+}
+function grandTotal() {
+  return Math.max(0, Cart.subtotal - promo) + shippingCost();
+}
+
+function paintSummary() {
+  const lines = Cart.lines;
+  qs('#itemCount').textContent = Cart.count + (Cart.count === 1 ? ' item' : ' items') +
+    ' from ' + new Set(lines.map(l => l.p.seller)).size + ' maker(s)';
+
+  qs('#summaryLines').innerHTML = lines.length ? lines.map(l => `
+    <div class="line" style="grid-template-columns:56px 1fr auto;padding:11px 0">
+      <span class="line__img" style="width:56px">${ART.product(l.p.art, l.variant || l.p.cw)}</span>
+      <div>
+        <div class="line__t" style="font-size:12.5px">${esc(l.p.title)}</div>
+        <div class="line__m">${esc(l.p.sellerObj.name)}${l.size ? ' · ' + esc(l.size) : ''} · ×${l.q}</div>
+      </div>
+      <div class="line__p" style="font-size:13px">${money(l.p.price * l.q)}</div>
+    </div>`).join('')
+    : `<p class="muted" style="font-size:13px;padding:16px 0">Your basket is empty.
+       <a href="browse.html" style="text-decoration:underline">Find something.</a></p>`;
+
+  const ship = shippingCost();
+  qs('#summaryTotals').innerHTML = `
+    <div><span>Subtotal</span><span>${money(Cart.subtotal)}</span></div>
+    ${Cart.saved ? `<div style="color:var(--danger)"><span>Maker discounts</span><span>−${money(Cart.saved)}</span></div>` : ''}
+    ${promo ? `<div style="color:var(--danger)"><span>Promo 4KILOWELCOME</span><span>−${money(promo)}</span></div>` : ''}
+    <div><span>Delivery (${SHIP_METHODS.find(s => s[0] === shipMethod)[1]})</span><span>${ship ? money(ship) : 'Free'}</span></div>
+    <div class="grand"><span>Total</span><span>${money(grandTotal())}</span></div>`;
+
+  qs('#summaryPerks').innerHTML = [
+    ['shield', 'Covered by 4KILO Protect'],
+    ['refresh', '14-day returns on this order'],
+    ['truck', 'Tracked from workshop to door']
+  ].map(([i, t]) => `<div class="row" style="gap:9px;font-size:12.5px;color:var(--text-2)">
+      ${icon(i)}<span>${t}</span></div>`).join('');
+  qsa('#summaryPerks svg').forEach(s => { s.style.width = '15px'; s.style.height = '15px'; s.style.color = 'var(--brand)'; });
+
+  paintReview();
+}
+
+function paintReview() {
+  const shipName = SHIP_METHODS.find(s => s[0] === shipMethod)[1];
+  const payName = PAY_METHODS.find(pm => pm[0] === payMethod)[1];
+  qs('#reviewBlock').innerHTML = `
+    <div class="stack" style="--s:14px">
+      <div class="panel panel--flat">
+        <div class="row row--between"><b style="font-size:13px">Delivering to</b>
+          <button class="btn btn--quiet btn--sm" data-next="1">Edit</button></div>
+        <p style="font-size:13px;color:var(--text-2);margin-top:6px">
+          ${esc(qs('#fn').value || 'Name')} ${esc(qs('#ln').value)}<br>
+          ${esc(qs('#addr').value || 'Address')}, ${esc(qs('#city').value)}<br>
+          ${esc(qs('#ph').value || '')}
+        </p>
+      </div>
+      <div class="panel panel--flat">
+        <div class="row row--between"><b style="font-size:13px">Paying with</b>
+          <button class="btn btn--quiet btn--sm" data-next="2">Edit</button></div>
+        <p style="font-size:13px;color:var(--text-2);margin-top:6px">${payName} · ${shipName} delivery</p>
+      </div>
+      <div class="totals" style="margin:0">
+        <div><span>Items (${Cart.count})</span><span>${money(Cart.subtotal)}</span></div>
+        ${promo ? `<div style="color:var(--danger)"><span>Promo</span><span>−${money(promo)}</span></div>` : ''}
+        <div><span>Delivery</span><span>${shippingCost() ? money(shippingCost()) : 'Free'}</span></div>
+        <div class="grand"><span>Total due</span><span>${money(grandTotal())}</span></div>
+      </div>
+    </div>`;
+}
+
+/* ---------- promo ---------- */
+on(qs('#applyPromo'), 'click', () => {
+  const code = qs('#promo').value.trim().toUpperCase();
+  const msg = qs('#promoMsg');
+  if (code === '4KILOWELCOME') {
+    promo = Math.round(Cart.subtotal * 0.1);
+    msg.textContent = '10% off applied — welcome to 4KILO.';
+    msg.style.color = 'var(--forest-500)';
+    toast('Promo applied · you saved ' + money(promo));
+  } else if (!code) {
+    msg.textContent = ''; promo = 0;
+  } else {
+    promo = 0;
+    msg.textContent = 'That code is not recognised.';
+    msg.style.color = 'var(--danger)';
+  }
+  paintSummary();
+});
+
+/* ---------- place order ---------- */
+on(qs('#placeOrder'), 'click', () => {
+  if (!Cart.count) { toast('Your basket is empty', 'close'); return; }
+  if (!qs('#agree').checked) { toast('Please accept the return policy to continue', 'close'); return; }
+
+  const order = {
+    ref: '4K-' + Math.floor(20000 + Math.random() * 79999),
+    total: grandTotal(),
+    items: Cart.count,
+    eta: new Date(Date.now() + (shipMethod === 'express' ? 1 : 4) * 864e5)
+  };
+  Store.write('lastOrder', { ...order, eta: order.eta.toISOString() });
+
+  qs('#doneArt').innerHTML = ART.successArt();
+  qs('#doneLede').innerHTML =
+    `Order <b class="mono">${order.ref}</b> is confirmed. We have emailed the receipt and
+     you will get a tracking link the moment it leaves the workshop.`;
+  qs('#doneSummary').innerHTML = `
+    <div class="totals" style="margin:0">
+      <div><span>Order reference</span><span class="mono">${order.ref}</span></div>
+      <div><span>Items</span><span>${order.items}</span></div>
+      <div><span>Paying with</span><span>${PAY_METHODS.find(p => p[0] === payMethod)[1]}</span></div>
+      <div><span>Estimated arrival</span><span>${order.eta.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span></div>
+      <div class="grand"><span>Paid</span><span>${money(order.total)}</span></div>
+    </div>`;
+
+  Cart.clear();
+  promo = 0;
+  goto(4);
+  toast('Order placed — thank you');
+});
+
+document.addEventListener('cart:change', paintSummary);
+paintSteps();
+paintSummary();
+if (!Cart.count) toast('Your basket is empty — add something first', 'cart');
+</script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sell on 4KILO — 6% flat, paid every Friday</title>
+<meta name="description" content="Open a shop in ten minutes. No listing fee, no monthly charge, no paid ranking. A flat 6% commission and payouts every Friday.">
+<meta name="theme-color" content="#0F2E24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="sell">
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" style="padding-bottom:clamp(36px,5vw,64px)">
+    <div class="hero__blob"></div>
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <span class="eyebrow">For makers & shops</span>
+        <h1 class="display" style="font-size:clamp(2.3rem,5.2vw,4.2rem)">
+          Keep <span class="serif-em">94%</span><br>of what you make.
+        </h1>
+        <p class="lede">
+          A flat six percent. No listing fee, no monthly subscription, no payment processing
+          cut, and no way to buy your way up the search results. Open a shop in ten minutes
+          and get paid every Friday.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="#apply">Open a shop</a>
+          <a class="btn btn--ghost btn--lg" href="dashboard.html">See the dashboard</a>
+        </div>
+        <div class="hero__stats">
+          <div class="hero__stat"><b>6%</b><span>Flat commission</span></div>
+          <div class="hero__stat"><b>3 days</b><span>Average payout</span></div>
+          <div class="hero__stat"><b>Br 2.4 B</b><span>Paid to makers</span></div>
+        </div>
+      </div>
+      <div class="reveal" id="heroArt"></div>
+    </div>
+  </section>
+
+  <!-- ============ FEE COMPARISON ============ -->
+  <section class="section--tight" id="fees">
+    <div class="wrap">
+      <div class="panel">
+        <div class="section-head" style="margin-bottom:22px">
+          <div>
+            <span class="eyebrow">The whole fee, in one table</span>
+            <h2 class="h2" style="margin-top:12px">What it actually costs</h2>
+          </div>
+          <div class="row" style="gap:10px">
+            <label class="muted" style="font-size:12.5px" for="feeInput">Item price</label>
+            <input class="select" id="feeInput" type="number" value="5000" min="100" step="100" style="width:130px">
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="table" id="feeTable"></table>
+        </div>
+        <p class="muted" style="font-size:12px;margin-top:14px">
+          Comparison figures are typical published rates for general marketplaces operating in the region.
+          4KILO's 6% is the entire deduction — nothing else comes off before payout.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STEPS ============ -->
+  <section class="section tint">
+    <div class="wrap feature-split">
+      <div>
+        <span class="eyebrow">Getting started</span>
+        <h2 class="h1" style="margin-block:14px 30px">Four steps to your first sale</h2>
+        <ol class="numlist" id="stepList"></ol>
+        <a class="btn btn--primary btn--lg" style="margin-top:32px" href="#apply">Start now</a>
+      </div>
+      <div class="grid" style="gap:14px" id="stepArt"></div>
+    </div>
+  </section>
+
+  <!-- ============ STUDIO ============ -->
+  <section class="section" id="studio">
+    <div class="wrap feature-split">
+      <div class="reveal" id="studioArt"></div>
+      <div>
+        <span class="eyebrow">Free for your first ten listings</span>
+        <h2 class="h1" style="margin-block:14px 16px">Bring the product.<br>We shoot it.</h2>
+        <p class="lede">
+          Photography is the single biggest reason a good product does not sell. Our Bole studio
+          shoots, retouches, cuts out and uploads your first ten listings at no charge — and
+          after that it is 200 Br per product, at cost.
+        </p>
+        <div class="stack" style="--s:12px;margin-top:26px" id="studioPerks"></div>
+        <a class="btn btn--ghost" style="margin-top:26px" href="#apply">Book a studio slot</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SELLER STORIES ============ -->
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Makers already here</span>
+          <h2 class="h2" style="margin-top:12px">People who took the leap</h2>
+        </div>
+      </div>
+      <div class="cards cards--3" id="sellerCards"></div>
+    </div>
+  </section>
+
+  <!-- ============ APPLY ============ -->
+  <section class="section" id="apply">
+    <div class="wrap">
+      <div class="pdp" style="grid-template-columns:1fr .9fr">
+        <div class="panel">
+          <span class="eyebrow">Open a shop</span>
+          <h2 class="h2" style="margin-block:12px 8px">Tell us what you make</h2>
+          <p class="muted" style="font-size:13.5px;margin-bottom:24px">
+            We review applications within two working days. You will need a trade licence or
+            individual TIN, and a bank account in the same name.
+          </p>
+          <form id="applyForm" class="stack" style="--s:16px" novalidate>
+            <div class="field-grid">
+              <div class="field"><label for="sname">Shop name</label><input id="sname" placeholder="Gojo Collective" required></div>
+              <div class="field"><label for="scity">City</label><select id="scity"></select></div>
+            </div>
+            <div class="field-grid">
+              <div class="field"><label for="sphone">Phone</label><input id="sphone" type="tel" placeholder="+251 91 234 5678" required></div>
+              <div class="field"><label for="semail">Email</label><input id="semail" type="email" placeholder="you@example.com" required></div>
+            </div>
+            <div class="field">
+              <label for="scat">What do you sell?</label>
+              <select id="scat"></select>
+            </div>
+            <div class="field">
+              <label for="svol">Roughly how many items could you list?</label>
+              <select id="svol">
+                <option>1 – 10 items</option><option>11 – 50 items</option>
+                <option>51 – 200 items</option><option>200+ items</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="sabout">Tell us about the work</label>
+              <textarea id="sabout" rows="4" placeholder="Who makes it, what it is made from, and how long you have been doing it."></textarea>
+              <small>This becomes the first draft of your shop bio, so write it the way you would say it.</small>
+            </div>
+            <label class="row" style="gap:10px;align-items:flex-start;font-size:13px;color:var(--text-2);cursor:pointer">
+              <input type="checkbox" id="sagree" style="margin-top:3px;accent-color:var(--brand);width:16px;height:16px">
+              <span>I confirm I have the right to sell these products and agree to the seller terms.</span>
+            </label>
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Submit application</button>
+          </form>
+          <div id="applyDone" style="display:none"></div>
+        </div>
+
+        <aside class="gallery">
+          <div class="panel">
+            <h3 class="h3" style="margin-bottom:16px">What you get on day one</h3>
+            <div class="stack" style="--s:14px" id="dayOne"></div>
+          </div>
+          <div class="panel" style="margin-top:14px;background:var(--forest-900);color:#D7E3DA;border-color:transparent">
+            <span class="eyebrow" style="color:#8FC4AE">Payout calculator</span>
+            <h3 class="h3" style="margin-block:12px 16px;color:#fff">See it in Birr</h3>
+            <div class="field">
+              <label style="color:#A9BFB2" for="calcPrice">Your price per item</label>
+              <input id="calcPrice" type="number" value="5000" min="100" step="100"
+                     style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#fff">
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label style="color:#A9BFB2" for="calcQty">Items sold per month</label>
+              <input id="calcQty" type="number" value="40" min="1" step="1"
+                     style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#fff">
+            </div>
+            <div class="totals" style="margin-top:18px;color:#A9BFB2" id="calcOut"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section tint" id="faq">
+    <div class="wrap feature-split" style="align-items:start">
+      <div>
+        <span class="eyebrow">Seller FAQ</span>
+        <h2 class="h1" style="margin-block:14px 16px">Before you ask</h2>
+        <p class="lede">Our seller support team is on Telegram and phone, 8am–8pm, in Amharic, Afaan Oromoo and English.</p>
+      </div>
+      <div class="acc" id="sellFaq"></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/art.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+qs('#heroArt').innerHTML = ART.hero();
+
+/* ---------- fee table ---------- */
+const COMPARE = [
+  ['4KILO', 6, 0, 0, 0, true],
+  ['Typical global marketplace', 12, 2.9, 1.5, 40, false],
+  ['Social-commerce page', 0, 3.5, 0, 0, false],
+  ['Consignment retail', 40, 0, 0, 0, false]
+];
+function paintFees() {
+  const price = Math.max(100, Number(qs('#feeInput').value) || 5000);
+  qs('#feeTable').innerHTML = `
+    <thead><tr><th>Channel</th><th>Commission</th><th>Payment fee</th><th>Listing</th><th>Ads to rank</th><th style="text-align:right">You keep</th></tr></thead>
+    <tbody>${COMPARE.map(([name, comm, pay, listPct, ads, ours]) => {
+      const keep = price - (price * comm / 100) - (price * pay / 100) - (price * listPct / 100) - ads;
+      return `<tr ${ours ? 'style="background:color-mix(in srgb,var(--brand) 8%,transparent)"' : ''}>
+        <td><b>${name}</b>${ours ? ' <span class="badge badge--green">You are here</span>' : ''}</td>
+        <td>${comm}%</td><td>${pay ? pay + '%' : '—'}</td><td>${listPct ? listPct + '%' : '—'}</td>
+        <td>${ads ? money(ads) : '—'}</td>
+        <td style="text-align:right"><b style="font-size:14px;${ours ? 'color:var(--forest-500)' : ''}">${money(keep)}</b></td>
+      </tr>`;
+    }).join('')}</tbody>`;
+}
+on(qs('#feeInput'), 'input', paintFees);
+paintFees();
+
+/* ---------- steps ---------- */
+qs('#stepList').innerHTML = SELL_STEPS.map(s =>
+  `<li class="reveal"><div><b>${s.t}</b><p>${s.d}</p></div></li>`).join('');
+qs('#stepArt').innerHTML = `
+  <div class="panel reveal">
+    <div class="row row--between" style="margin-bottom:14px">
+      <b style="font-size:13.5px">This week's payout</b>
+      <span class="badge badge--green">Friday, cleared</span>
+    </div>
+    <div style="font-family:var(--font-display);font-size:2.4rem;letter-spacing:-.03em;line-height:1">Br 184,320</div>
+    <div class="totals" style="margin-top:16px">
+      <div><span>62 orders</span><span>Br 196,085</span></div>
+      <div><span>4KILO commission (6%)</span><span>−Br 11,765</span></div>
+      <div class="grand"><span>To your account</span><span>Br 184,320</span></div>
+    </div>
+  </div>
+  <div class="panel reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    ${[['basket','ember'],['rug','cobalt'],['coffee','forest']].map(([k,c]) =>
+      `<div style="border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border)">${ART.product(k,c)}</div>`).join('')}
+    <p class="muted" style="grid-column:1/-1;font-size:12.5px;margin:0">
+      Three listings, shot and uploaded by our studio team in a single afternoon.
+    </p>
+  </div>`;
+
+/* ---------- studio ---------- */
+qs('#studioArt').innerHTML = `<div style="border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--border)">
+  ${ART.product('camera', 'obsidian')}</div>`;
+qs('#studioPerks').innerHTML = [
+  ['spark', 'Six angles per product', 'Front, back, detail, in-use, scale and packed.'],
+  ['grid', 'Cut out and colour-matched', 'Consistent across your whole shop.'],
+  ['refresh', 'Reshoots are free', 'If a listing underperforms, we shoot it again.']
+].map(([i, b, s]) => `<div class="perk">${icon(i)}<span><b>${b}</b><span>${s}</span></span></div>`).join('');
+
+/* ---------- seller cards ---------- */
+qs('#sellerCards').innerHTML = Object.values(SELLERS).slice(0, 3).map(s => `
+  <div class="card reveal" style="padding:22px">
+    <div class="row" style="gap:13px">
+      <span class="avatar avatar--lg">${ART.avatar(s.id + s.name)}</span>
+      <div>
+        <b style="font-size:15px;display:block">${s.name}</b>
+        <span class="muted" style="font-size:12.5px">${s.city} · joined ${s.since}</span>
+        <div style="margin-top:6px">${stars(Math.round(s.rating))}</div>
+      </div>
+    </div>
+    <p style="font-size:13.5px;color:var(--text-2);margin-top:16px;line-height:1.6">“${s.bio}”</p>
+    <div class="statbar" style="margin-top:18px;grid-template-columns:1fr 1fr">
+      <div style="padding:14px"><b style="font-size:1.2rem">${s.sales.toLocaleString()}</b><span>Orders</span></div>
+      <div style="padding:14px"><b style="font-size:1.2rem">${s.rating}</b><span>Rating</span></div>
+    </div>
+  </div>`).join('');
+
+/* ---------- apply form ---------- */
+qs('#scity').innerHTML = CITIES.map(c => `<option>${c}</option>`).join('');
+qs('#scat').innerHTML = CATEGORIES.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+  + '<option>Something else</option>';
+
+qs('#dayOne').innerHTML = [
+  ['grid', 'Your own shop page', 'A public profile with your story, city and full catalogue.'],
+  ['chart', 'The seller dashboard', 'Live orders, revenue, traffic and payout schedule.'],
+  ['wallet', 'Friday payouts', 'Straight to CBE, Awash, Dashen or Abyssinia.'],
+  ['shield', 'Buyer protection cover', 'We absorb fraud losses, not you.'],
+  ['chat', 'A named account manager', 'Once you pass 100 orders a month.']
+].map(([i, b, s]) => `<div class="perk">${icon(i)}<span><b>${b}</b><span>${s}</span></span></div>`).join('');
+
+on(qs('#applyForm'), 'submit', e => {
+  e.preventDefault();
+  const name = qs('#sname').value.trim();
+  if (!name) { qs('#sname').focus(); toast('Your shop needs a name', 'close'); return; }
+  if (!qs('#sphone').value.trim()) { qs('#sphone').focus(); toast('We need a phone number', 'close'); return; }
+  if (!qs('#sagree').checked) { toast('Please accept the seller terms', 'close'); return; }
+
+  qs('#applyForm').style.display = 'none';
+  const done = qs('#applyDone');
+  done.style.display = '';
+  done.innerHTML = `<div class="text-c" style="padding:20px 0">
+    <div style="width:130px;margin:0 auto 18px">${ART.successArt()}</div>
+    <h3 class="h3">Application received</h3>
+    <p class="muted" style="font-size:13.5px;margin-top:8px;max-width:40ch;margin-inline:auto">
+      Thank you, ${esc(name)}. We review every application by hand — expect a call from our
+      seller team within two working days.
+    </p>
+    <div class="panel panel--flat" style="text-align:left;margin-top:22px">
+      <div class="totals" style="margin:0">
+        <div><span>Reference</span><span class="mono">SHOP-${Math.floor(1000 + Math.random() * 8999)}</span></div>
+        <div><span>Reviewed by</span><span>${new Date(Date.now() + 2 * 864e5).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}</span></div>
+        <div><span>Next step</span><span>Licence & bank details</span></div>
+      </div>
+    </div>
+    <a class="btn btn--primary" style="margin-top:22px" href="dashboard.html">Preview your dashboard</a>
+  </div>`;
+  toast('Application submitted — we will call you');
+  done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+/* ---------- payout calculator ---------- */
+function paintCalc() {
+  const price = Math.max(0, Number(qs('#calcPrice').value) || 0);
+  const qty = Math.max(0, Number(qs('#calcQty').value) || 0);
+  const gross = price * qty;
+  const fee = Math.round(gross * 0.06);
+  qs('#calcOut').innerHTML = `
+    <div><span>Gross sales</span><span style="color:#fff">${money(gross)}</span></div>
+    <div><span>4KILO commission (6%)</span><span style="color:#E08B82">−${money(fee)}</span></div>
+    <div><span>Payment processing</span><span style="color:#8FC4AE">Br 0</span></div>
+    <div><span>Listing fees</span><span style="color:#8FC4AE">Br 0</span></div>
+    <div class="grand" style="border-color:rgba(255,255,255,.15);color:#fff">
+      <span>You keep, monthly</span><span>${money(gross - fee)}</span></div>
+    <div style="font-size:12px;padding-top:6px"><span>Per year</span><span>${money((gross - fee) * 12)}</span></div>`;
+}
+['#calcPrice', '#calcQty'].forEach(s => on(qs(s), 'input', paintCalc));
+paintCalc();
+
+/* ---------- seller FAQ ---------- */
+const SELLER_FAQ = [
+  ['What do I need to open a shop?', 'A trade licence or an individual TIN, a bank account in the same name, a phone number, and at least one product you can photograph. That is genuinely all — there is no minimum stock level and no application fee.'],
+  ['When exactly do I get paid?', 'Payouts run every Friday morning for all orders whose 48-hour protection window closed by Thursday midnight. Money typically clears into CBE, Awash, Dashen or Abyssinia accounts the same day, and by Monday at the latest.'],
+  ['Can I pay to rank higher in search?', 'No. There is no advertising product on 4KILO and no sponsored placement. Search ranking is driven by relevance, rating, dispatch speed and claim rate. A new shop with good service will out-rank an old one with bad service.'],
+  ['Who pays if an order goes missing?', 'We do. If a tracked parcel is lost in transit or a buyer is defrauded, 4KILO absorbs the loss and you keep your payout. You are only liable if the item was misdescribed or never dispatched.'],
+  ['Do I have to handle delivery myself?', 'No. Print a label from the dashboard and hand the parcel to any of our four courier partners. Pickup from your workshop is free once you are doing five or more orders a week.'],
+  ['Can I sell things I did not make myself?', 'Yes — importers and resellers are welcome. You just have to say so on the listing. We only require that the "Handmade" badge is reserved for work made by you or your workshop.']
+];
+qs('#sellFaq').innerHTML = SELLER_FAQ.map(([q, a]) => `
+  <div class="acc__item">
+    <button class="acc__btn" aria-expanded="false">${q} ${icon('plus')}</button>
+    <div class="acc__panel"><div><p>${a}</p></div></div>
+  </div>`).join('');
+wireAccordions();
+wireReveal();
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Netlify & Cloudflare Pages read this file. Other hosts ignore it harmlessly.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# HTML is rewritten on every deploy, so never let a browser hold a stale copy.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Fingerprint these filenames before raising max-age; today they can change
+# under the same path, so a day is the safe ceiling.
+/assets/*
+  Cache-Control: public, max-age=86400

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product — 4KILO Marketplace</title>
+<meta name="description" content="Product detail on 4KILO Marketplace.">
+<meta name="theme-color" content="#0F2E24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="browse">
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main">
+  <section class="section--tight">
+    <div class="wrap">
+      <nav class="breadcrumb" id="crumb" aria-label="Breadcrumb"></nav>
+      <div class="pdp">
+
+        <!-- ---------- gallery ---------- -->
+        <div class="gallery">
+          <div class="gallery__main" id="gMain"></div>
+          <div class="gallery__thumbs" id="gThumbs"></div>
+          <div class="perks" style="margin-top:26px" id="perks"></div>
+        </div>
+
+        <!-- ---------- buy box ---------- -->
+        <div class="stack" style="--s:18px">
+          <div>
+            <div class="row row--wrap" style="gap:7px;margin-bottom:12px" id="flags"></div>
+            <h1 class="h1" id="title" style="font-size:clamp(1.6rem,2.8vw,2.3rem)"></h1>
+            <p class="lede" style="margin-top:10px;font-size:1.02rem" id="tagline"></p>
+          </div>
+
+          <div class="row row--wrap" style="gap:14px">
+            <span id="ratingStars"></span>
+            <a href="#reviews" class="muted" style="font-size:13px;text-decoration:underline;text-underline-offset:3px" id="reviewLink"></a>
+            <span class="badge badge--green" id="stockBadge"></span>
+          </div>
+
+          <div>
+            <div class="price-row">
+              <span class="price-now" id="price"></span>
+              <span class="price-was" id="was"></span>
+              <span class="badge badge--red" id="discount"></span>
+            </div>
+            <p class="muted" style="font-size:12.5px" id="priceNote"></p>
+          </div>
+
+          <hr style="border:0;border-top:1px solid var(--border)">
+
+          <div id="colorWrap">
+            <div class="row row--between" style="margin-bottom:11px">
+              <h4 style="font-family:var(--font-ui);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Finish</h4>
+              <span style="font-size:13px;font-weight:600" id="colorName"></span>
+            </div>
+            <div class="swatches" id="swatches"></div>
+          </div>
+
+          <div id="sizeWrap" style="display:none">
+            <div class="row row--between" style="margin-bottom:11px">
+              <h4 style="font-family:var(--font-ui);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Size</h4>
+              <a href="#" style="font-size:12.5px;text-decoration:underline;text-underline-offset:3px" class="muted">Size guide</a>
+            </div>
+            <div class="size-opts" id="sizes"></div>
+          </div>
+
+          <div class="row" style="gap:10px;align-items:stretch">
+            <div class="qty" style="margin:0;padding:0 4px">
+              <button id="qMinus" aria-label="Decrease quantity">−</button>
+              <span id="qVal">1</span>
+              <button id="qPlus" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="btn btn--primary btn--lg" style="flex:1" id="addBtn"></button>
+            <button class="btn btn--ghost btn--icon" id="favBtn" aria-label="Save this item" style="width:52px;height:auto"></button>
+          </div>
+          <button class="btn btn--dark btn--lg btn--block" id="buyNow">Buy it now</button>
+
+          <div class="panel panel--flat" style="padding:15px 17px">
+            <div class="row" style="gap:10px;font-size:13px">
+              <span id="shipIcon"></span>
+              <span><b id="shipLine"></b><br><span class="muted" id="shipSub"></span></span>
+            </div>
+          </div>
+
+          <!-- seller -->
+          <div class="seller-card">
+            <span class="avatar" id="sellerAv"></span>
+            <div style="flex:1;min-width:0">
+              <b style="font-size:14px;display:flex;align-items:center;gap:5px" id="sellerName"></b>
+              <span class="muted" style="font-size:12px" id="sellerMeta"></span>
+            </div>
+            <a class="btn btn--ghost btn--sm" id="sellerLink">Visit shop</a>
+          </div>
+
+          <!-- details -->
+          <div class="acc" data-multi id="detailAcc"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- reviews ---------- -->
+  <section class="section tint" id="reviews">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Verified purchases</span>
+          <h2 class="h2" style="margin-top:12px">What buyers report</h2>
+        </div>
+        <button class="btn btn--ghost btn--sm" onclick="toast('Sign in to write a review')">Write a review</button>
+      </div>
+      <div class="panel" style="margin-bottom:26px">
+        <div class="rating-summary">
+          <div class="text-c">
+            <div class="rating-big" id="ratingBig"></div>
+            <div id="ratingStars2"></div>
+            <div class="muted" style="font-size:12.5px;margin-top:6px" id="ratingCount"></div>
+          </div>
+          <div class="stack" style="--s:8px" id="ratingBars"></div>
+        </div>
+      </div>
+      <div id="reviewList"></div>
+    </div>
+  </section>
+
+  <!-- ---------- related ---------- -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">You might also like</span>
+          <h2 class="h2" style="margin-top:12px" id="relTitle">More from this maker</h2>
+        </div>
+        <a class="btn btn--ghost btn--sm" id="relAll">See all</a>
+      </div>
+      <div class="cards cards--4" id="related"></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/art.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+const pid = new URLSearchParams(location.search).get('id');
+const p = PRODUCTS.find(x => x.id === pid) || PRODUCTS[0];
+
+/* remember for "recently viewed" */
+(function remember() {
+  const r = Store.read('recent', []).filter(x => x !== p.id);
+  r.unshift(p.id);
+  Store.write('recent', r.slice(0, 10));
+})();
+
+document.title = p.title + ' — 4KILO';
+qs('meta[name=description]').content = p.tagline || p.desc.slice(0, 150);
+
+let variant = p.colors[0] ? p.colors[0][0] : p.cw;
+let size = p.sizes[0] || '';
+let qty = 1;
+
+/* ---------- breadcrumb ---------- */
+const cat = CATEGORIES.find(c => c.id === p.cat);
+qs('#crumb').innerHTML =
+  `<a href="index.html">Home</a>${icon('chevron')}` +
+  `<a href="browse.html?cat=${p.cat}">${cat ? cat.name : p.cat}</a>${icon('chevron')}` +
+  `<span class="muted">${esc(p.sub)}</span>`;
+
+/* ---------- head fields ---------- */
+qs('#title').textContent = p.title;
+qs('#tagline').textContent = p.tagline || '';
+qs('#flags').innerHTML = p.badges.map(b => {
+  const [l, c] = BADGE_LABEL[b] || [b, ''];
+  return `<span class="badge ${c}">${l}</span>`;
+}).join('');
+qs('#ratingStars').innerHTML = stars(p.rating);
+qs('#reviewLink').textContent = `${p.rating.toFixed(1)} · ${p.reviews} reviews`;
+qs('#stockBadge').innerHTML = p.stock > 12
+  ? icon('check') + ' In stock'
+  : icon('spark') + ` Only ${p.stock} left`;
+if (p.stock <= 12) qs('#stockBadge').className = 'badge badge--red';
+
+qs('#price').textContent = money(p.price);
+if (p.was) {
+  qs('#was').textContent = money(p.was);
+  qs('#discount').textContent = '−' + p.discount + '%';
+} else { qs('#was').remove(); qs('#discount').remove(); }
+qs('#priceNote').textContent = CURRENCY.rateNote + ' · delivery calculated at checkout';
+
+/* ---------- gallery ---------- */
+const views = ['product', 'detail', 'context', 'scale', 'packed'];
+function paintGallery() {
+  qs('#gMain').innerHTML = ART.product(p.art, variant);
+  qs('#gThumbs').innerHTML = p.colors.length
+    ? p.colors.map(([cw, name], i) =>
+        `<button class="gallery__thumb ${cw === variant ? 'is-on' : ''}" data-cw="${cw}"
+          aria-label="${esc(name)}">${ART.product(p.art, cw)}</button>`).join('')
+    : views.slice(0, 4).map((v, i) =>
+        `<button class="gallery__thumb ${i === 0 ? 'is-on' : ''}">${ART.product(p.art, p.cw)}</button>`).join('');
+}
+paintGallery();
+on(qs('#gThumbs'), 'click', e => {
+  const b = e.target.closest('[data-cw]');
+  if (!b) return;
+  variant = b.dataset.cw;
+  paintGallery(); paintSwatches();
+});
+
+/* ---------- swatches ---------- */
+const SWATCH_HEX = {
+  obsidian: '#2C3230', forest: '#2E7D5E', clay: '#C2724C', sand: '#C9A96A',
+  cobalt: '#33559B', plum: '#6B4373', rose: '#C4677A', slate: '#5A6B75',
+  olive: '#6E7A45', ember: '#B3462F', ivory: '#D8CFBE', teal: '#2C6E70'
+};
+function paintSwatches() {
+  if (!p.colors.length) { qs('#colorWrap').style.display = 'none'; return; }
+  qs('#swatches').innerHTML = p.colors.map(([cw, name]) =>
+    `<button class="swatch ${cw === variant ? 'is-on' : ''}" data-cw="${cw}"
+      style="background:${SWATCH_HEX[cw] || '#888'}" aria-label="${esc(name)}" title="${esc(name)}"></button>`).join('');
+  const found = p.colors.find(c => c[0] === variant);
+  qs('#colorName').textContent = found ? found[1] : '';
+}
+paintSwatches();
+on(qs('#swatches'), 'click', e => {
+  const b = e.target.closest('[data-cw]');
+  if (!b) return;
+  variant = b.dataset.cw;
+  paintSwatches(); paintGallery();
+});
+
+/* ---------- sizes ---------- */
+if (p.sizes.length) {
+  qs('#sizeWrap').style.display = '';
+  const out = p.sizes.length > 4 ? [p.sizes[p.sizes.length - 1]] : [];
+  qs('#sizes').innerHTML = p.sizes.map(s =>
+    `<button class="size-opt ${s === size ? 'is-on' : ''}" data-size="${s}"
+      ${out.includes(s) ? 'disabled' : ''}>${s}</button>`).join('');
+  on(qs('#sizes'), 'click', e => {
+    const b = e.target.closest('[data-size]');
+    if (!b || b.disabled) return;
+    size = b.dataset.size;
+    qsa('#sizes .size-opt').forEach(x => x.classList.toggle('is-on', x.dataset.size === size));
+  });
+}
+
+/* ---------- quantity + buy ---------- */
+function paintQty() { qs('#qVal').textContent = qty; }
+on(qs('#qMinus'), 'click', () => { qty = Math.max(1, qty - 1); paintQty(); paintAdd(); });
+on(qs('#qPlus'), 'click', () => { qty = Math.min(p.stock, qty + 1); paintQty(); paintAdd(); });
+function paintAdd() {
+  qs('#addBtn').innerHTML = icon('cart') + ` Add to basket · ${money(p.price * qty)}`;
+}
+paintAdd();
+on(qs('#addBtn'), 'click', () => {
+  Cart.add(p.id, qty, variant, size);
+  toast(`${qty} × ${p.title.split('—')[0].trim()} added`);
+  openCart();
+});
+on(qs('#buyNow'), 'click', () => {
+  Cart.add(p.id, qty, variant, size);
+  location.href = 'checkout.html';
+});
+
+qs('#favBtn').innerHTML = icon('heart');
+qs('#favBtn').dataset.fav = p.id;
+Wish.sync();
+
+/* ---------- shipping panel ---------- */
+qs('#shipIcon').innerHTML = icon('truck');
+qs('#shipIcon').firstChild.style.color = 'var(--brand)';
+const eta = new Date(Date.now() + p.shipDays * 864e5);
+qs('#shipLine').textContent = `Arrives ${eta.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+qs('#shipSub').textContent =
+  `${p.price >= 2500 ? 'Free' : 'Br 120'} delivery in Addis Ababa · ships from ${p.sellerObj.city}`;
+
+/* ---------- perks ---------- */
+qs('#perks').innerHTML = [
+  ['shield', '4KILO Protect', 'Refunded in full if it is not as described'],
+  ['refresh', '14-day returns', 'No questions, no restocking fee'],
+  ['chat', 'Message the maker', 'Typical reply in under 3 hours']
+].map(([i, b, s]) => `<div class="perk">${icon(i)}<span><b>${b}</b><span>${s}</span></span></div>`).join('');
+
+/* ---------- seller ---------- */
+const s = p.sellerObj;
+qs('#sellerAv').innerHTML = ART.avatar(s.id + s.name);
+qs('#sellerName').innerHTML = esc(s.name) + (s.verified ? icon('shield', 'vfi') : '');
+qsa('.vfi').forEach(x => { x.style.width = '14px'; x.style.height = '14px'; x.style.color = 'var(--forest-500)'; });
+qs('#sellerMeta').textContent = `${s.city} · ${s.rating}★ · ${s.sales.toLocaleString()} sales · since ${s.since}`;
+qs('#sellerLink').href = 'browse.html?seller=' + s.id;
+
+/* ---------- detail accordion ---------- */
+qs('#detailAcc').innerHTML = `
+  <div class="acc__item is-open">
+    <button class="acc__btn" aria-expanded="true">Description ${icon('plus')}</button>
+    <div class="acc__panel"><div>
+      <p>${esc(p.desc)}</p>
+      <ul>${p.highlights.map(h => `<li>${esc(h)}</li>`).join('')}</ul>
+    </div></div>
+  </div>
+  <div class="acc__item">
+    <button class="acc__btn" aria-expanded="false">Specifications ${icon('plus')}</button>
+    <div class="acc__panel"><div>
+      <table class="spec" style="margin-bottom:18px">
+        ${p.specs.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}
+      </table>
+    </div></div>
+  </div>
+  <div class="acc__item">
+    <button class="acc__btn" aria-expanded="false">Delivery & returns ${icon('plus')}</button>
+    <div class="acc__panel"><div><p>
+      Dispatched from ${esc(s.city)} within ${p.shipDays} working day${p.shipDays > 1 ? 's' : ''}.
+      Delivery inside Addis Ababa is 120 Br, free above 2,500 Br. Other cities 250–400 Br.
+      Returns accepted within 14 days of delivery in original condition; return postage is
+      yours unless the item was faulty or misdescribed.
+    </p></div></div>
+  </div>
+  <div class="acc__item">
+    <button class="acc__btn" aria-expanded="false">About ${esc(s.name)} ${icon('plus')}</button>
+    <div class="acc__panel"><div><p>${esc(s.bio)}</p>
+      <p style="padding-bottom:0">Trading on 4KILO since ${s.since} · ${s.sales.toLocaleString()} orders fulfilled ·
+      ${s.rating}★ across all listings.</p>
+    </div></div>
+  </div>`;
+wireAccordions();
+
+/* ---------- reviews ---------- */
+const revs = reviewsFor(p, 6);
+qs('#ratingBig').textContent = p.rating.toFixed(1);
+qs('#ratingStars2').innerHTML = stars(p.rating);
+qs('#ratingCount').textContent = p.reviews.toLocaleString() + ' verified reviews';
+
+const dist = [5, 4, 3, 2, 1].map(n => {
+  const pct = { 5: 74, 4: 18, 3: 5, 2: 2, 1: 1 }[n];
+  return `<div class="bar"><span style="width:28px">${n}★</span>
+    <span class="bar__track"><span class="bar__fill" style="width:${pct}%"></span></span>
+    <span class="mono" style="width:34px;text-align:right">${pct}%</span></div>`;
+}).join('');
+qs('#ratingBars').innerHTML = dist;
+
+qs('#reviewList').innerHTML = revs.map(r => `
+  <article class="review">
+    <div class="review__head">
+      <span class="avatar avatar--sm">${ART.avatar(r.name + p.id)}</span>
+      <div>
+        <div class="review__name">${esc(r.name)}
+          ${r.verified ? '<span class="badge badge--green" style="margin-left:6px">Verified purchase</span>' : ''}
+        </div>
+        <div class="review__meta">${r.days} days ago · ${esc(r.variant)}</div>
+      </div>
+      <span style="margin-left:auto">${stars(r.stars)}</span>
+    </div>
+    <p>${esc(r.body)}</p>
+  </article>`).join('');
+
+/* ---------- related ---------- */
+let rel = PRODUCTS.filter(x => x.seller === p.seller && x.id !== p.id);
+if (rel.length < 4) {
+  qs('#relTitle').textContent = 'Others in ' + (cat ? cat.name : p.sub);
+  rel = rel.concat(PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id && !rel.includes(x)));
+}
+qs('#relAll').href = 'browse.html?seller=' + p.seller;
+qs('#related').innerHTML = rel.slice(0, 4).map(x => productCard(x)).join('');
+qsa('#related .reveal').forEach(el => el.classList.add('in'));
+Wish.sync();
+wireReveal();
+</script>
+</body>
+</html>

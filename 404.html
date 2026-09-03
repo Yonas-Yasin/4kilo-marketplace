@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — 4KILO Marketplace</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0F2E24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="404">
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main">
+  <section class="hero">
+    <div class="hero__blob"></div>
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <span class="eyebrow">Error 404</span>
+        <h1 class="display" style="font-size:clamp(2.4rem,5.4vw,4.4rem);margin-block:18px 20px">
+          This stall is<br><span class="serif-em">empty</span>.
+        </h1>
+        <p class="lede">
+          The page you were after has moved, sold out, or never existed. The rest of
+          the market is still open.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="/index.html">Back to the market</a>
+          <a class="btn btn--ghost btn--lg" href="/browse.html">Browse everything</a>
+        </div>
+      </div>
+      <div id="art404"></div>
+    </div>
+  </section>
+
+  <section class="section--tight" style="padding-top:0">
+    <div class="wrap">
+      <h2 class="h3" style="margin-bottom:20px">Popular right now</h2>
+      <div class="cards cards--4" id="pop404"></div>
+    </div>
+  </section>
+</main>
+
+<script src="/assets/js/art.js"></script>
+<script src="/assets/js/data.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+qs('#art404').innerHTML = ART.product('basket', 'ember');
+qs('#art404').style.cssText = 'border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--border)';
+
+qs('#pop404').innerHTML = PRODUCTS
+  .slice().sort((a, b) => b.reviews - a.reviews).slice(0, 4)
+  .map(p => productCard(p)).join('');
+qsa('#pop404 .reveal').forEach(el => el.classList.add('in'));
+Wish.sync();
+</script>
+</body>
+</html>

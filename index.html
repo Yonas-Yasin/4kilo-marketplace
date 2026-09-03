@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4KILO Marketplace — Things made by people you can name</title>
+<meta name="description" content="A curated marketplace for independent makers, importers and small brands across Ethiopia. 1,240 verified sellers. Every order protected.">
+<meta name="theme-color" content="#0F2E24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="home">
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero__blob"></div>
+    <div class="hero__blob hero__blob--2"></div>
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <span class="eyebrow">Addis Ababa · Since 2019</span>
+        <h1 class="display">
+          Things made by<br>people you can <span class="serif-em">name</span>.
+        </h1>
+        <p class="lede">
+          4KILO is a marketplace for makers, importers and small brands who put their
+          name on the work. Every listing tells you who made it, what it is made from,
+          and how long it will last.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="browse.html">Browse the market</a>
+          <a class="btn btn--ghost btn--lg" href="sell.html">Sell on 4KILO</a>
+        </div>
+        <div class="hero__stats">
+          <div class="hero__stat"><b>1,240</b><span>Verified makers</span></div>
+          <div class="hero__stat"><b>8,400+</b><span>Products listed</span></div>
+          <div class="hero__stat"><b>11</b><span>Cities delivered</span></div>
+          <div class="hero__stat"><b>4.8</b><span>Average rating</span></div>
+        </div>
+      </div>
+      <div class="hero__art reveal" id="heroArt"></div>
+    </div>
+  </section>
+
+  <!-- ============ TRUST ============ -->
+  <section class="section--tight" style="padding-block:0">
+    <div class="wrap">
+      <div class="panel panel--flat row row--between row--wrap" style="gap:24px">
+        <span class="eyebrow" style="flex:none">Pay how you already pay</span>
+        <div class="trust" id="trustRow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section class="section" id="categories">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Departments</span>
+          <h2 class="h1" style="margin-top:12px">Start somewhere</h2>
+        </div>
+        <a class="btn btn--ghost" href="browse.html">All departments <span id="i1"></span></a>
+      </div>
+      <div class="cats" id="catGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURED ============ -->
+  <section class="section tint" id="featured">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Curated weekly</span>
+          <h2 class="h1" style="margin-top:12px">This week on the floor</h2>
+          <p class="lede">Chosen by our buying team from 340 new listings. No paid placement — sellers cannot buy their way into this row.</p>
+        </div>
+      </div>
+      <div class="row row--wrap" style="gap:8px;margin-bottom:24px" id="featTabs"></div>
+      <div class="cards cards--4" id="featGrid"></div>
+      <div class="text-c" style="margin-top:34px">
+        <a class="btn btn--dark btn--lg" href="browse.html">See all 8,400 products</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROTECT ============ -->
+  <section class="section" id="protect">
+    <div class="wrap feature-split">
+      <div class="reveal">
+        <span class="eyebrow">4KILO Protect</span>
+        <h2 class="h1" style="margin-block:14px 16px">Your money does not<br>move until the box does.</h2>
+        <p class="lede">
+          When you pay, we hold the funds. The seller is paid 48 hours after you confirm
+          the item arrived as described. If it does not arrive, or it is not what the listing
+          said it was, you are refunded in full — usually inside five working days.
+        </p>
+        <div class="perks" style="margin-top:32px">
+          <div class="perk" id="pk1"></div>
+          <div class="perk" id="pk2"></div>
+          <div class="perk" id="pk3"></div>
+        </div>
+        <a class="btn btn--primary" style="margin-top:30px" href="#faq">How claims work</a>
+      </div>
+      <div class="reveal" id="protectArt"></div>
+    </div>
+  </section>
+
+  <!-- ============ DEALS ============ -->
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Ends Sunday</span>
+          <h2 class="h2" style="margin-top:12px">Marked down this week</h2>
+        </div>
+        <a class="btn btn--ghost btn--sm" href="browse.html?sort=deals">All deals</a>
+      </div>
+      <div class="scroll-x" id="dealRow"></div>
+    </div>
+  </section>
+
+  <!-- ============ MAKER STORY ============ -->
+  <section class="section" id="makers">
+    <div class="wrap">
+      <div class="panel" style="padding:0;overflow:hidden">
+        <div class="feature-split" style="gap:0;align-items:stretch">
+          <div id="storyArt" style="min-height:340px;background:var(--surface-2)"></div>
+          <div style="padding:clamp(26px,4vw,54px);display:flex;flex-direction:column;justify-content:center">
+            <span class="eyebrow">Maker story · No. 41</span>
+            <h2 class="h2" style="margin-block:14px 14px">140 weavers, one loom at a time</h2>
+            <p class="lede" style="font-size:1rem">
+              When Almaz Tesfaye moved the Gojo Collective onto 4KILO in 2021, forty women
+              were weaving. Payouts arrived every Friday instead of every season, and the
+              cooperative could finally buy wool in bulk. Today it is a hundred and forty.
+            </p>
+            <blockquote style="margin-top:22px;padding-left:18px;border-left:2px solid var(--accent)">
+              <p style="font-family:var(--font-display);font-size:1.1rem;line-height:1.5">
+                “Before, a trader set the price and we found out months later. Now the weaver's
+                name is on the label and she sets it herself.”
+              </p>
+              <footer class="row" style="margin-top:16px">
+                <span class="avatar avatar--sm" id="almazAv"></span>
+                <span>
+                  <b style="font-size:13px;display:block">Almaz Tesfaye</b>
+                  <span class="muted" style="font-size:11.5px">Founder, Gojo Collective · Bahir Dar</span>
+                </span>
+              </footer>
+            </blockquote>
+            <div class="row" style="margin-top:28px;gap:10px;flex-wrap:wrap">
+              <a class="btn btn--primary" href="browse.html?cat=craft">Shop the collective</a>
+              <a class="btn btn--quiet" href="#makers">Read all maker stories</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="section tint">
+    <div class="wrap feature-split">
+      <div>
+        <span class="eyebrow">How it works</span>
+        <h2 class="h1" style="margin-block:14px 30px">Four steps, no surprises</h2>
+        <ol class="numlist" id="howList"></ol>
+      </div>
+      <div class="grid cards--2" style="gap:14px" id="howArt"></div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="statbar reveal">
+        <div><b>Br 2.4 B</b><span>Paid to makers since 2019</span></div>
+        <div><b>96.4%</b><span>Orders delivered on time</span></div>
+        <div><b>3 days</b><span>Average seller payout</span></div>
+        <div><b>0.7%</b><span>Orders that end in a claim</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">From the floor</span>
+          <h2 class="h1" style="margin-top:12px">What people say</h2>
+        </div>
+      </div>
+      <div class="quotes" id="quoteGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ TOP SELLERS ============ -->
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Verified shops</span>
+          <h2 class="h2" style="margin-top:12px">Makers worth following</h2>
+        </div>
+        <a class="btn btn--ghost btn--sm" href="browse.html">Browse by shop</a>
+      </div>
+      <div class="cards cards--4" id="sellerGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <div class="wrap feature-split" style="align-items:start">
+      <div>
+        <span class="eyebrow">Questions</span>
+        <h2 class="h1" style="margin-block:14px 16px">Everything else</h2>
+        <p class="lede">Still stuck? Our support desk answers in Amharic and English, 8am–8pm, seven days a week.</p>
+        <a class="btn btn--ghost" style="margin-top:22px" href="#">Message support</a>
+      </div>
+      <div class="acc" id="faqAcc"></div>
+    </div>
+  </section>
+
+  <!-- ============ SELL CTA ============ -->
+  <section class="section--tight" style="padding-bottom:clamp(48px,7vw,90px)">
+    <div class="wrap">
+      <div class="panel reveal" style="background:var(--forest-900);color:#E7F0EA;border-color:transparent;text-align:center;padding:clamp(34px,5vw,64px)">
+        <span class="eyebrow" style="color:#8FC4AE">For makers</span>
+        <h2 class="h1" style="margin-block:16px 14px;color:#fff">Sell where the fee is 6%<br>and the story is yours.</h2>
+        <p style="max-width:56ch;margin:0 auto;color:#A9BFB2">
+          No listing fee. No monthly charge. No paid ranking. Open a shop in ten minutes and
+          get paid every Friday.
+        </p>
+        <div class="row" style="justify-content:center;gap:12px;margin-top:28px;flex-wrap:wrap">
+          <a class="btn btn--gold btn--lg" href="sell.html">Start selling</a>
+          <a class="btn btn--lg" style="--btn-bg:transparent;--btn-fg:#fff;--btn-bd:rgba(255,255,255,.25)" href="dashboard.html">See the seller dashboard</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/js/art.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+/* ---------- hero + decorative art ---------- */
+qs('#heroArt').innerHTML = ART.hero();
+qs('#almazAv').innerHTML = ART.avatar('almaz2');
+qs('#i1').innerHTML = icon('arrow');
+
+qs('#trustRow').innerHTML = ['telebirr','cbe','chapa','visa','dhl']
+  .map(n => ART.partner(n)).join('');
+
+/* ---------- categories ---------- */
+qs('#catGrid').innerHTML = CATEGORIES.map(c => {
+  const n = PRODUCTS.filter(p => p.cat === c.id).length;
+  return `<a class="cat reveal" href="browse.html?cat=${c.id}">
+    <span style="width:40px;height:40px;border-radius:10px;overflow:hidden;display:block">
+      ${ART.product(c.art, c.cw)}
+    </span>
+    <b>${c.name}</b>
+    <span>${c.blurb}</span>
+    <span class="mono muted" style="margin-top:2px">${n * 137 + 84} items</span>
+  </a>`;
+}).join('');
+
+/* ---------- featured with tabs ---------- */
+const FEAT_TABS = [
+  ['all', 'Everything'],
+  ['editors', "Editors' picks"],
+  ['handmade', 'Handmade'],
+  ['new', 'Just landed'],
+  ['deal', 'On offer']
+];
+let featTab = 'all';
+
+function featured() {
+  let list = PRODUCTS.slice();
+  if (featTab !== 'all') list = list.filter(p => p.badges.includes(featTab));
+  if (!list.length) list = PRODUCTS.slice();
+  return list.sort((a, b) => b.rating - a.rating || b.reviews - a.reviews).slice(0, 8);
+}
+function paintFeat() {
+  qs('#featTabs').innerHTML = FEAT_TABS.map(([k, t]) =>
+    `<button class="chip ${k === featTab ? 'is-on' : ''}" data-tab="${k}">${t}</button>`).join('');
+  qs('#featGrid').innerHTML = featured().map(p => productCard(p)).join('');
+  Wish.sync(); wireReveal();
+  qsa('#featGrid .reveal').forEach(el => el.classList.add('in'));
+}
+paintFeat();
+on(qs('#featTabs'), 'click', e => {
+  const b = e.target.closest('[data-tab]');
+  if (!b) return;
+  featTab = b.dataset.tab;
+  paintFeat();
+});
+
+/* ---------- protect perks ---------- */
+const PERKS = [
+  ['shield', 'Funds held in escrow', 'Released 48 h after you confirm delivery.'],
+  ['refresh', '14-day returns', 'On everything but perishables and made-to-order.'],
+  ['truck', 'Tracked to the door', 'Live updates across all 11 cities we serve.']
+];
+PERKS.forEach(([ic, b, s], i) => {
+  qs('#pk' + (i + 1)).innerHTML = `${icon(ic)}<span><b>${b}</b><span>${s}</span></span>`;
+});
+qs('#protectArt').innerHTML = `
+  <div class="panel" style="display:grid;gap:16px">
+    <div class="row" style="gap:14px">
+      <span style="width:64px;height:64px">${ART.successArt()}</span>
+      <div>
+        <b style="font-size:15px;display:block">Order #4K-28841 delivered</b>
+        <span class="muted" style="font-size:12.5px">Kochere Washed 1 kg · Yirga Roasters</span>
+      </div>
+      <span class="badge badge--green" style="margin-left:auto">Protected</span>
+    </div>
+    <hr class="hr" style="margin:0">
+    <div class="totals" style="margin:0">
+      <div><span>Paid by you</span><span>Br 1,850</span></div>
+      <div><span>Held by 4KILO</span><span>0 h remaining</span></div>
+      <div><span>Released to maker</span><span>Br 1,739</span></div>
+      <div><span>4KILO commission (6%)</span><span>Br 111</span></div>
+    </div>
+    <div class="badge badge--gold">${icon('check')} Claim window open until 14 Sept</div>
+  </div>`;
+
+/* ---------- deals ---------- */
+qs('#dealRow').innerHTML = PRODUCTS.filter(p => p.was)
+  .sort((a, b) => b.discount - a.discount)
+  .map(p => productCard(p)).join('');
+qsa('#dealRow .reveal').forEach(el => el.classList.add('in'));
+
+/* ---------- maker story art ---------- */
+qs('#storyArt').innerHTML = ART.product('rug', 'ember');
+qs('#storyArt').style.display = 'grid';
+
+/* ---------- how it works ---------- */
+qs('#howList').innerHTML = HOW_IT_WORKS
+  .map(s => `<li class="reveal"><div><b>${s.t}</b><p>${s.d}</p></div></li>`).join('');
+qs('#howArt').innerHTML = [
+  ['mesob-basket', 'basket', 'ember'], ['coffee', 'coffee', 'forest'],
+  ['rug', 'rug', 'cobalt'], ['lamp', 'lamp', 'sand']
+].map(([, k, c]) => `<div class="reveal" style="border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border)">
+  ${ART.product(k, c)}</div>`).join('');
+
+/* ---------- testimonials ---------- */
+qs('#quoteGrid').innerHTML = TESTIMONIALS.map(t => `
+  <blockquote class="panel quote reveal">
+    ${stars(5)}
+    <p>“${t.q}”</p>
+    <footer>
+      <span class="avatar avatar--sm">${ART.avatar(t.s)}</span>
+      <span><b>${t.n}</b><span>${t.r}</span></span>
+    </footer>
+  </blockquote>`).join('');
+
+/* ---------- sellers ---------- */
+qs('#sellerGrid').innerHTML = Object.values(SELLERS)
+  .sort((a, b) => b.sales - a.sales).slice(0, 4).map(s => `
+  <a class="card reveal" href="browse.html?seller=${s.id}" style="padding:20px">
+    <div class="row" style="gap:13px">
+      <span class="avatar">${ART.avatar(s.id + s.name)}</span>
+      <div>
+        <b style="font-size:14.5px;display:flex;align-items:center;gap:5px">
+          ${s.name}${s.verified ? icon('shield', 'vf') : ''}
+        </b>
+        <span class="muted" style="font-size:12px">${s.city} · since ${s.since}</span>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--text-2);margin-top:14px;line-height:1.55">${s.bio}</p>
+    <div class="row" style="margin-top:16px;gap:14px;font-size:12.5px">
+      <span class="row" style="gap:4px">${iconFilled('star')}<b>${s.rating}</b></span>
+      <span class="muted">${s.sales.toLocaleString()} sales</span>
+    </div>
+  </a>`).join('');
+qsa('.vf').forEach(s => { s.style.width = '14px'; s.style.height = '14px'; s.style.color = 'var(--forest-500)'; });
+
+/* ---------- faq ---------- */
+qs('#faqAcc').innerHTML = FAQS.map(([q, a]) => `
+  <div class="acc__item">
+    <button class="acc__btn" aria-expanded="false">${q} ${icon('plus')}</button>
+    <div class="acc__panel"><div><p>${a}</p></div></div>
+  </div>`).join('');
+wireAccordions();
+wireReveal();
+</script>
+</body>
+</html>
