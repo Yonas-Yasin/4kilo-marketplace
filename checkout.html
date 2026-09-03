@@ -29,7 +29,7 @@
     <div class="wrap">
       <div class="steps" id="steps"></div>
 
-      <div class="pdp" style="grid-template-columns:1.15fr .85fr">
+      <div class="pdp" style="--pdp-a:1.15fr;--pdp-b:.85fr">
         <!-- ---------- form column ---------- -->
         <div>
           <!-- STEP 1 : delivery -->
@@ -62,7 +62,7 @@
             <h4 style="font-family:var(--font-ui);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:26px 0 12px">Delivery speed</h4>
             <div class="stack" style="--s:10px" id="shipOpts"></div>
 
-            <div class="row" style="margin-top:26px;gap:10px">
+            <div class="row row--wrap" style="margin-top:26px;gap:10px">
               <a class="btn btn--ghost" href="browse.html">Keep shopping</a>
               <span class="spacer"></span>
               <button class="btn btn--primary btn--lg" data-next="2">Continue to payment</button>
@@ -93,7 +93,7 @@
               </p>
             </div>
 
-            <div class="row" style="margin-top:26px;gap:10px">
+            <div class="row row--wrap" style="margin-top:26px;gap:10px">
               <button class="btn btn--ghost" data-next="1">Back</button>
               <span class="spacer"></span>
               <button class="btn btn--primary btn--lg" data-next="3">Review order</button>
@@ -109,7 +109,7 @@
               <span>I have read the return policy and understand that made-to-order furniture and
               perishable goods are excluded from the 14-day window.</span>
             </label>
-            <div class="row" style="margin-top:26px;gap:10px">
+            <div class="row row--wrap" style="margin-top:26px;gap:10px">
               <button class="btn btn--ghost" data-next="2">Back</button>
               <span class="spacer"></span>
               <button class="btn btn--primary btn--lg" id="placeOrder">Place order</button>
