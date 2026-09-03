@@ -307,8 +307,13 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   position: fixed; inset: 0; z-index: 120; display: none;
 }
 .drawer-nav.is-open { display: block; }
+/* .drawer-nav has its own stacking context, so these two z-indexes are scoped to
+   it. Without them the scrim (z-index 110) paints OVER the panel (z-index auto)
+   and the whole menu renders blurred and dimmed. */
+.drawer-nav .scrim { z-index: 0; }
 .drawer-nav__panel {
   position: absolute; inset: 0 0 0 auto; width: min(340px, 88vw);
+  z-index: 1;
   background: var(--bg); padding: 22px; overflow-y: auto;
   animation: slideIn .34s var(--ease-out);
   border-left: 1px solid var(--border);
