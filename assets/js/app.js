@@ -197,12 +197,14 @@ function productCard(p, opts = {}) {
 /* ---------- header / footer ---------- */
 function headerHTML() {
   const page = document.body.dataset.page || '';
+  /* Shopper-facing navigation only. The seller dashboard is deliberately absent:
+     it is the seller's own admin area, reached from the "For makers" footer
+     column and from sell.html, not advertised to people who came here to buy. */
   const nav = [
     ['browse.html', 'Browse', 'browse'],
     ['browse.html?cat=craft', 'Handmade', 'craft'],
     ['browse.html?sort=deals', 'Deals', 'deals'],
-    ['sell.html', 'Sell on 4KILO', 'sell'],
-    ['dashboard.html', 'Dashboard', 'dashboard']
+    ['sell.html', 'Sell on 4KILO', 'sell']
   ];
   return `
 <div class="strip" aria-label="Announcements">
