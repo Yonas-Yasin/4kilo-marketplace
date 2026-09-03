@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css?v=5">
-<link rel="icon" href="assets/img/favicon.svg?v=5" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/styles.css?v=6">
+<link rel="icon" href="assets/img/favicon.svg?v=6" type="image/svg+xml">
 </head>
 <body data-page="sell">
 <a class="skip" href="#main">Skip to content</a>
@@ -197,9 +197,9 @@
   </section>
 </main>
 
-<script src="assets/js/art.js?v=5"></script>
-<script src="assets/js/data.js?v=5"></script>
-<script src="assets/js/app.js?v=5"></script>
+<script src="assets/js/art.js?v=6"></script>
+<script src="assets/js/data.js?v=6"></script>
+<script src="assets/js/app.js?v=6"></script>
 <script>
 qs('#heroArt').innerHTML = ART.hero();
 
@@ -298,6 +298,21 @@ on(qs('#applyForm'), 'submit', e => {
   if (!qs('#sphone').value.trim()) { qs('#sphone').focus(); toast('We need a phone number', 'close'); return; }
   if (!qs('#sagree').checked) { toast('Please accept the seller terms', 'close'); return; }
 
+  /* queue it for review — admin.html reads this list */
+  const ref = 'SHOP-' + Math.floor(1000 + Math.random() * 8999);
+  AdminData.patch(d => d.applications.unshift({
+    ref,
+    name,
+    city: qs('#scity').value,
+    cat: qs('#scat').selectedOptions[0].textContent,
+    volume: qs('#svol').value,
+    phone: qs('#sphone').value.trim(),
+    email: qs('#semail').value.trim(),
+    about: qs('#sabout').value.trim(),
+    status: 'pending',
+    at: Date.now()
+  }));
+
   qs('#applyForm').style.display = 'none';
   const done = qs('#applyDone');
   done.style.display = '';
@@ -310,7 +325,7 @@ on(qs('#applyForm'), 'submit', e => {
     </p>
     <div class="panel panel--flat" style="text-align:left;margin-top:22px">
       <div class="totals" style="margin:0">
-        <div><span>Reference</span><span class="mono">SHOP-${Math.floor(1000 + Math.random() * 8999)}</span></div>
+        <div><span>Reference</span><span class="mono">${ref}</span></div>
         <div><span>Reviewed by</span><span>${new Date(Date.now() + 2 * 864e5).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}</span></div>
         <div><span>Next step</span><span>Licence & bank details</span></div>
       </div>

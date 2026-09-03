@@ -495,36 +495,92 @@ function wireAccordions(root = document) {
 }
 window.wireAccordions = wireAccordions;
 
+/* ==========================================================================
+   Admin overrides
+   admin.html writes edits here; every page replays them over the catalogue in
+   data.js before rendering, so a price changed in admin shows on the storefront.
+   This is browser-local (localStorage) — a demo of the data flow, not a server.
+   ========================================================================== */
+const AdminData = {
+  blank: { products: {}, added: [], removed: [], orders: {}, sellers: {}, claims: {}, applications: [] },
+  read() { return Object.assign({}, this.blank, Store.read('admin', {})); },
+  write(d) { Store.write('admin', d); },
+  patch(fn) { const d = this.read(); fn(d); this.write(d); return d; },
+  reset() { Store.write('admin', this.blank); }
+};
+
+function applyAdminOverrides() {
+  if (typeof PRODUCTS === 'undefined') return;
+  const d = AdminData.read();
+
+  for (let i = PRODUCTS.length - 1; i >= 0; i--) {
+    if (d.removed.includes(PRODUCTS[i].id)) PRODUCTS.splice(i, 1);
+  }
+
+  d.added.forEach((raw) => {
+    if (PRODUCTS.some((p) => p.id === raw.id)) return;
+    PRODUCTS.push(Object.assign({
+      sub: '', badges: [], colors: [], sizes: [], specs: [], highlights: [],
+      rating: 4.5, reviews: 0, stock: 20, shipDays: 3, was: null, tagline: '', desc: ''
+    }, raw));
+  });
+
+  PRODUCTS.forEach((p) => {
+    const o = d.products[p.id];
+    if (o) Object.assign(p, o);
+    p.sellerObj = (typeof SELLERS !== 'undefined' && SELLERS[p.seller]) || p.sellerObj;
+    p.cw = (p.colors && p.colors[0] && p.colors[0][0]) || p.cw || 'forest';
+    p.discount = p.was ? Math.round((1 - p.price / p.was) * 100) : 0;
+  });
+
+  if (typeof SELLERS !== 'undefined') {
+    Object.entries(d.sellers).forEach(([id, o]) => {
+      if (SELLERS[id]) Object.assign(SELLERS[id], o);
+    });
+  }
+}
+
 /* ---------- boot ---------- */
 function boot() {
-  // Keep the skip link as the first focusable thing on the page.
-  const skip = qs('.skip');
-  if (skip) skip.insertAdjacentHTML('afterend', headerHTML());
-  else document.body.insertAdjacentHTML('afterbegin', headerHTML());
-  document.body.insertAdjacentHTML('beforeend', footerHTML() + cartDrawerHTML());
+  applyAdminOverrides();
+
+  // Pages that are their own console (admin) opt out of the storefront chrome.
+  const shellOff = document.body.dataset.shell === 'off';
+
+  if (!shellOff) {
+    // Keep the skip link as the first focusable thing on the page.
+    const skip = qs('.skip');
+    if (skip) skip.insertAdjacentHTML('afterend', headerHTML());
+    else document.body.insertAdjacentHTML('afterbegin', headerHTML());
+    document.body.insertAdjacentHTML('beforeend', footerHTML() + cartDrawerHTML());
+  }
 
   Cart.sync();
   Wish.sync();
-  wireSearch();
+  if (!shellOff) wireSearch();
   wireReveal();
   wireAccordions();
 
   on(qs('#cartBtn'), 'click', openCart);
   on(qs('#cartClose'), 'click', closeCart);
   on(qs('#scrim'), 'click', closeCart);
-  on(document, 'keydown', (e) => { if (e.key === 'Escape') closeCart(); });
+  on(document, 'keydown', (e) => { if (e.key === 'Escape' && qs('#cartDrawer')) closeCart(); });
 
   qsa('[data-theme-btn]').forEach((b) => on(b, 'click', () => Theme.toggle()));
 
   const mob = qs('#mobileNav');
-  on(qs('#menuBtn'), 'click', () => { mob.classList.add('is-open'); document.body.style.overflow = 'hidden'; });
-  qsa('[data-close-nav]', mob).forEach((b) =>
-    on(b, 'click', () => { mob.classList.remove('is-open'); document.body.style.overflow = ''; }));
+  if (mob) {
+    on(qs('#menuBtn'), 'click', () => { mob.classList.add('is-open'); document.body.style.overflow = 'hidden'; });
+    qsa('[data-close-nav]', mob).forEach((b) =>
+      on(b, 'click', () => { mob.classList.remove('is-open'); document.body.style.overflow = ''; }));
+  }
 
   // sticky header shadow
   const hdr = qs('#siteHeader');
-  const onScroll = () => hdr.classList.toggle('is-stuck', window.scrollY > 8);
-  on(window, 'scroll', onScroll, { passive: true }); onScroll();
+  if (hdr) {
+    const onScroll = () => hdr.classList.toggle('is-stuck', window.scrollY > 8);
+    on(window, 'scroll', onScroll, { passive: true }); onScroll();
+  }
 
   // delegated actions
   on(document, 'click', (e) => {
